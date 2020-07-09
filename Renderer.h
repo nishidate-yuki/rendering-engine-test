@@ -17,7 +17,6 @@ public:
 
 private:
 	bool LoadShaders();
-	void CreateQuads();
 
 	std::unordered_map<std::string, class Mesh*> meshes;
 	class Engine* engine;
@@ -30,8 +29,10 @@ private:
 	class Shader* meshShader;
 	class VertexArray* spriteVerts;
 
+	class Scene* scene;
+
 	// Lighting data
-	glm::vec3 ambientLight;
+	//glm::vec3 ambientLight;
 	//DirectionalLight mDirLight;
 
 	// Window

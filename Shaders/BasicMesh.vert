@@ -1,12 +1,4 @@
-// ----------------------------------------------------------------
-// From Game Programming in C++ by Sanjay Madhav
-// Copyright (C) 2017 Sanjay Madhav. All rights reserved.
-// 
-// Released under the BSD License
-// See LICENSE in root directory for full details.
-// ----------------------------------------------------------------
 
-// Request GLSL 3.3
 #version 330
 
 // Uniforms for world transform and view-proj
@@ -25,12 +17,9 @@ void main()
 {
 	// Convert position to homogeneous coordinates
 	vec4 pos = vec4(inPosition, 1.0);
+	
 	// Transform to position world space, then clip space
-//	gl_Position = pos * uWorldTransform * uViewProj;
 	gl_Position = uViewProj * uWorldTransform * pos;
-//	gl_Position = pos * uViewProj;
-//	gl_Position = uViewProj * pos;
-//	gl_Position = pos;
 
 	// Pass along the texture coordinate to frag shader
 	fragTexCoord = inTexCoord;

@@ -4,6 +4,7 @@
 #include <glm/gtx/transform2.hpp>
 #include "Shader.h"
 #include "VertexArray.h"
+#include "Scene.h"
 
 Renderer::Renderer(Engine* engine)
 	: engine(engine)
@@ -35,8 +36,8 @@ bool Renderer::Initialize(float screenWidth, float screenHeight)
 	// Enable double buffering
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
 	// Antialiasing
-	//SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
-	//SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);
+	SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
+	SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);
 	// Force OpenGL to use hardware acceleration
 	SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
 
@@ -67,8 +68,8 @@ bool Renderer::Initialize(float screenWidth, float screenHeight)
 		return false;
 	}
 
-	// Create quad for drawing sprites
-	CreateQuads();
+	scene = new Scene();
+	scene->LoadContent();
 
 	return true;
 }
@@ -109,12 +110,8 @@ void Renderer::Draw()
 	glBlendEquationSeparate(GL_FUNC_ADD, GL_FUNC_ADD);
 	glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ZERO);
 
-	// Set shader/vao as active
-	spriteVerts->SetActive();
-	glm::mat4 world = glm::mat4(1.0f);
-	meshShader->SetMatrixUniform("uWorldTransform", world);
-
-	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+	// Draw scene
+	scene->Draw(meshShader);
 
 	// Swap
 	SDL_GL_SwapWindow(window);
@@ -137,22 +134,4 @@ bool Renderer::LoadShaders()
 	meshShader->SetMatrixUniform("uViewProj", projection * view);
 
 	return true;
-}
-
-void Renderer::CreateQuads()
-{
-	// pos, nor, tex
-	float vertices[] = {
-		-0.5f, 0.5f, 0.f, 0.f, 0.f, 1.0f, 0.f, 0.f, // top left
-		0.5f, 0.5f, 0.f, 0.f, 0.f, 1.0f, 1.f, 0.f, // top right
-		0.5f,-0.5f, 0.f, 0.f, 0.f, 1.0f, 1.f, 1.f, // bottom right
-		-0.5f,-0.5f, 0.f, 0.f, 0.f, 1.0f, 0.f, 1.f  // bottom left
-	};
-
-	unsigned int indices[] = {
-		0, 1, 2,
-		2, 3, 0
-	};
-
-	spriteVerts = new VertexArray(vertices, 4, indices, 6);
 }
