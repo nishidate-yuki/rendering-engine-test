@@ -9,7 +9,9 @@ public:
 	auto GetViewProjection() { return projection * view; }
 
 private:
-	// View/projection for 3D shaders
+	glm::vec3 position;
+	glm::vec3 target;
+
 	glm::mat4 view;
 	glm::mat4 projection;
 };
