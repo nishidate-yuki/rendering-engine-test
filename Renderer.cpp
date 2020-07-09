@@ -5,6 +5,7 @@
 #include "Shader.h"
 #include "VertexArray.h"
 #include "Scene.h"
+#include "Camera.h"
 
 Renderer::Renderer(Engine* engine)
 	: engine(engine)
@@ -71,6 +72,8 @@ bool Renderer::Initialize(float screenWidth, float screenHeight)
 	scene = new Scene();
 	scene->LoadContent();
 
+	camera = new Camera(screenWidth, screenHeight);
+
 	return true;
 }
 
@@ -88,30 +91,27 @@ void Renderer::Draw()
 	glClearColor(0.0f, 0.5f, 1.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	// Draw mesh components
-	// Enable depth buffering/disable alpha blend
 	glEnable(GL_DEPTH_TEST);
 	glDisable(GL_BLEND);
-	// Set the mesh shader active
+	
 	meshShader->SetActive();
-	// Update view-projection matrix
-	meshShader->SetMatrixUniform("uViewProj", projection * view);
+	meshShader->SetMatrixUniform("uViewProj", camera->GetViewProjection());
+	
 	// Update lighting uniforms
-	//SetLightUniforms(mMeshShader);
-	//for (auto mc : mMeshComps) {
-	//	mc->Draw(mMeshShader);
-	//}
-
-	// Draw all sprite components
-	// Disable depth buffering
-	glDisable(GL_DEPTH_TEST);
-	// Enable alpha blending on the color buffer
-	glEnable(GL_BLEND);
-	glBlendEquationSeparate(GL_FUNC_ADD, GL_FUNC_ADD);
-	glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ZERO);
+	//SetLightUniforms(meshShader);
 
 	// Draw scene
 	scene->Draw(meshShader);
+
+	glDisable(GL_DEPTH_TEST);
+	glEnable(GL_BLEND);
+
+	glBlendEquationSeparate(GL_FUNC_ADD, GL_FUNC_ADD);
+	glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ZERO);
+
+	// ----- “§‰ß•¨‘Ì‚ÌƒŒƒ“ƒ_ƒŠƒ“ƒO -----
+	// pass
+	// ----------------------------
 
 	// Swap
 	SDL_GL_SwapWindow(window);
@@ -126,12 +126,6 @@ bool Renderer::LoadShaders()
 	}
 
 	meshShader->SetActive();
-	// Set the view-projection matrix
-	view = glm::lookAt(glm::vec3(4.0f, 4.0f, -4.0f), 
-		glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-	projection = glm::perspective(glm::radians(45.0f),
-		screenWidth / screenHeight, 0.01f, 100.0f);
-	meshShader->SetMatrixUniform("uViewProj", projection * view);
 
 	return true;
 }

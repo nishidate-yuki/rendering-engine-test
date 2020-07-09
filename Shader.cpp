@@ -17,20 +17,19 @@ Shader::~Shader()
 
 bool Shader::Load(const std::string& vertName, const std::string& fragName)
 {
-	// Compile vertex and pixel shaders
+	// Compile vertex/frag shaders
 	if (!CompileShader(vertName, GL_VERTEX_SHADER, vertexShader)
 		|| !CompileShader(fragName, GL_FRAGMENT_SHADER, fragShader)) {
 		return false;
 	}
 
-	// Now create a shader program that
-	// links together the vertex/frag shaders
+	// Create shader program
 	shaderProgram = glCreateProgram();
 	glAttachShader(shaderProgram, vertexShader);
 	glAttachShader(shaderProgram, fragShader);
 	glLinkProgram(shaderProgram);
 
-	// Verify that the program linked successfully
+	// Verify linking
 	if (!IsValidProgram()) {
 		return false;
 	}
@@ -58,7 +57,6 @@ void Shader::SetMatrixUniform(const char* name, const glm::mat4& matrix)
 	// Find the uniform by this name
 	GLuint loc = glGetUniformLocation(shaderProgram, name);
 	// Send the matrix data to the uniform
-	//glUniformMatrix4fv(loc, 1, GL_TRUE, matrix.GetAsFloatPtr());
 	glUniformMatrix4fv(loc, 1, GL_TRUE, glm::value_ptr(matrix));
 }
 
@@ -66,7 +64,6 @@ void Shader::SetVectorUniform(const char* name, const glm::vec3& vector)
 {
 	GLuint loc = glGetUniformLocation(shaderProgram, name);
 	// Send the vector data
-	//glUniform3fv(loc, 1, vector.GetAsFloatPtr());
 	glUniform3fv(loc, 1, glm::value_ptr(vector));
 }
 

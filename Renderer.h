@@ -21,15 +21,13 @@ private:
 	std::unordered_map<std::string, class Mesh*> meshes;
 	class Engine* engine;
 
-	// View/projection for 3D shaders
-	glm::mat4 view;
-	glm::mat4 projection;
-
 	// shader
 	class Shader* meshShader;
 	class VertexArray* spriteVerts;
 
 	class Scene* scene;
+
+	class Camera* camera;
 
 	// Lighting data
 	//glm::vec3 ambientLight;
