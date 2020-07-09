@@ -15,8 +15,6 @@ public:
 	void LoadContent();
 
 private:
-	//std::vector<Model*> models;
-	std::vector<Mesh*> meshes;
 	std::vector<Model*> models;
 };
 

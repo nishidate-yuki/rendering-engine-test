@@ -121,7 +121,10 @@ bool Renderer::LoadShaders()
 {
 	// Create basic mesh shader
 	meshShader = new Shader();
-	if (!meshShader->Load("Shaders/BasicMesh.vert", "Shaders/BasicMesh.frag")) {
+	//if (!meshShader->Load("Shaders/BasicMesh.vert", "Shaders/BasicMesh.frag")) {
+	//	return false;
+	//}
+	if (!meshShader->Load("Shaders/Phong.vert", "Shaders/Phong.frag")) {
 		return false;
 	}
 
