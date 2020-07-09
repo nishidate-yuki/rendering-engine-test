@@ -124,7 +124,7 @@ bool Renderer::LoadShaders()
 	//if (!meshShader->Load("Shaders/BasicMesh.vert", "Shaders/BasicMesh.frag")) {
 	//	return false;
 	//}
-	if (!meshShader->Load("Shaders/Phong.vert", "Shaders/Phong.frag")) {
+	if (!meshShader->Load("Shaders/Normal.vert", "Shaders/Normal.frag")) {
 		return false;
 	}
 
