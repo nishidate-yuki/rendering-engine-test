@@ -1,6 +1,9 @@
 #include "Renderer.h"
 #include <iostream>
 #include <GL/glew.h>
+#include <glm/gtx/transform2.hpp>
+#include "Shader.h"
+#include "VertexArray.h"
 
 Renderer::Renderer(Engine* engine)
 	: engine(engine)
@@ -58,6 +61,15 @@ bool Renderer::Initialize(float screenWidth, float screenHeight)
 	// so clear it
 	glGetError();
 
+	// Make sure we can create/compile shaders
+	if (!LoadShaders()) {
+		SDL_Log("Failed to load shaders.");
+		return false;
+	}
+
+	// Create quad for drawing sprites
+	CreateQuads();
+
 	return true;
 }
 
@@ -72,8 +84,37 @@ void Renderer::UnloadData()
 void Renderer::Draw()
 {
 	// Clear
-	glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
+	glClearColor(0.0f, 0.5f, 1.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	// Draw mesh components
+	// Enable depth buffering/disable alpha blend
+	glEnable(GL_DEPTH_TEST);
+	glDisable(GL_BLEND);
+	// Set the mesh shader active
+	meshShader->SetActive();
+	// Update view-projection matrix
+	meshShader->SetMatrixUniform("uViewProj", projection * view);
+	// Update lighting uniforms
+	//SetLightUniforms(mMeshShader);
+	//for (auto mc : mMeshComps) {
+	//	mc->Draw(mMeshShader);
+	//}
+
+	// Draw all sprite components
+	// Disable depth buffering
+	glDisable(GL_DEPTH_TEST);
+	// Enable alpha blending on the color buffer
+	glEnable(GL_BLEND);
+	glBlendEquationSeparate(GL_FUNC_ADD, GL_FUNC_ADD);
+	glBlendFuncSeparate(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA, GL_ONE, GL_ZERO);
+
+	// Set shader/vao as active
+	spriteVerts->SetActive();
+	glm::mat4 world = glm::mat4(1.0f);
+	meshShader->SetMatrixUniform("uWorldTransform", world);
+
+	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
 
 	// Swap
 	SDL_GL_SwapWindow(window);
@@ -81,5 +122,37 @@ void Renderer::Draw()
 
 bool Renderer::LoadShaders()
 {
+	// Create basic mesh shader
+	meshShader = new Shader();
+	if (!meshShader->Load("Shaders/BasicMesh.vert", "Shaders/BasicMesh.frag")) {
+		return false;
+	}
+
+	meshShader->SetActive();
+	// Set the view-projection matrix
+	view = glm::lookAt(glm::vec3(4.0f, 4.0f, -4.0f), 
+		glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+	projection = glm::perspective(glm::radians(45.0f),
+		screenWidth / screenHeight, 0.01f, 100.0f);
+	meshShader->SetMatrixUniform("uViewProj", projection * view);
+
 	return true;
+}
+
+void Renderer::CreateQuads()
+{
+	// pos, nor, tex
+	float vertices[] = {
+		-0.5f, 0.5f, 0.f, 0.f, 0.f, 1.0f, 0.f, 0.f, // top left
+		0.5f, 0.5f, 0.f, 0.f, 0.f, 1.0f, 1.f, 0.f, // top right
+		0.5f,-0.5f, 0.f, 0.f, 0.f, 1.0f, 1.f, 1.f, // bottom right
+		-0.5f,-0.5f, 0.f, 0.f, 0.f, 1.0f, 0.f, 1.f  // bottom left
+	};
+
+	unsigned int indices[] = {
+		0, 1, 2,
+		2, 3, 0
+	};
+
+	spriteVerts = new VertexArray(vertices, 4, indices, 6);
 }
