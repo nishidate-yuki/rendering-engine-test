@@ -8,13 +8,19 @@ class Shader;
 class Scene
 {
 public:
-	Scene();
+	Scene(class Engine* engine);
 	~Scene();
-	void Draw(Shader* shader);
+	bool Initialize(float screenWidth, float screenHeight);
+	//void Draw(Shader* shader);
+	void Draw();
 
-	void LoadContent();
+	bool LoadContent();
+	bool LoadShaders();
 
 private:
+	class Engine* engine;
 	std::vector<Model*> models;
+	class Shader* meshShader;
+	class Camera* camera;
 };
 

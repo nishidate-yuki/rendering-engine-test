@@ -3,6 +3,7 @@
 #include <SDL2/SDL.h>
 #include "Renderer.h"
 #include "WindowManager.h"
+#include "Scene.h"
 
 Engine::Engine()
 	: renderer(nullptr)
@@ -21,18 +22,23 @@ bool Engine::Initialize()
 		return false;
 	}
 
-	windowManager = new WindowManager(this);
-	windowManager->Initialize(1024.0f, 768.0f);
+	float screenWidth = 1024.0f;
+	float screenHeight = 768.0f;
 
-	// Create the renderer
-	//renderer = new Renderer(this);
-	renderer = new Renderer(this, windowManager);
-	if (!renderer->Initialize(1024.0f, 768.0f)) {
-		SDL_Log("Failed to initialize renderer");
-		delete renderer;
-		renderer = nullptr;
+	// Create window manager
+	windowManager = new WindowManager(this);
+	if (!windowManager->Initialize(screenWidth, screenHeight)) {
+		SDL_Log("Failed to initialize window manager");
 		return false;
 	}
+
+	//Create scene
+	scene = new Scene(this);
+	scene->Initialize(screenWidth, screenHeight);
+
+	// Create renderer
+	renderer = new Renderer(this);
+	renderer->Initialize(windowManager, scene);
 
 	ticksCount = SDL_GetTicks();
 

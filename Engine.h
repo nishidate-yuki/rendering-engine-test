@@ -19,6 +19,7 @@ private:
 
 	class WindowManager* windowManager;
 	class Renderer* renderer;
+	class Scene* scene;
 	Uint32 ticksCount;
 	bool isRunning;
 };
