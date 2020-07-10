@@ -17,6 +17,7 @@ private:
 	void Render();
 	void LoadData();
 
+	class WindowManager* windowManager;
 	class Renderer* renderer;
 	Uint32 ticksCount;
 	bool isRunning;

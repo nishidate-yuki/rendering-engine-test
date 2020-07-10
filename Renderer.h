@@ -7,6 +7,8 @@ class Renderer
 {
 public:
 	Renderer(class Engine* engine);
+	Renderer(class Engine* engine,
+		     class WindowManager* windowManager);
 	~Renderer();
 
 	bool Initialize(float screenWidth, float screenHeight);
@@ -38,6 +40,8 @@ private:
 
 	// OpenGL context
 	SDL_GLContext context;
+
+	class WindowManager* windowManager;
 
 	// Width/height
 	float screenWidth;

@@ -2,6 +2,7 @@
 #include <iostream>
 #include <SDL2/SDL.h>
 #include "Renderer.h"
+#include "WindowManager.h"
 
 Engine::Engine()
 	: renderer(nullptr)
@@ -20,8 +21,12 @@ bool Engine::Initialize()
 		return false;
 	}
 
+	windowManager = new WindowManager(this);
+	windowManager->Initialize(1024.0f, 768.0f);
+
 	// Create the renderer
-	renderer = new Renderer(this);
+	//renderer = new Renderer(this);
+	renderer = new Renderer(this, windowManager);
 	if (!renderer->Initialize(1024.0f, 768.0f)) {
 		SDL_Log("Failed to initialize renderer");
 		delete renderer;
