@@ -11,6 +11,8 @@ public:
 	void RunLoop();
 	void Shutdown();
 
+	void Stop() { isRunning = false; }
+
 private:
 	void ProcessInput();
 	void Update();
@@ -18,6 +20,7 @@ private:
 	void LoadData();
 
 	class WindowManager* windowManager;
+	class InputManager* inputManager;
 	class Renderer* renderer;
 	class Scene* scene;
 	Uint32 ticksCount;

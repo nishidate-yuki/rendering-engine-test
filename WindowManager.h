@@ -2,10 +2,13 @@
 #include <SDL2/SDL.h>
 #include <glm/glm.hpp>
 
+class Engine;
+
 class WindowManager
 {
 public:
-	WindowManager(class Engine* engine);
+	// OpenGLの初期化の関係でコンストラクタではなくInitialize()を使用する
+	WindowManager(Engine* engine);
 
 	bool Initialize(float screenWidth, float screenHeight);
 	void Shutdown();

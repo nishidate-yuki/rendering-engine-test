@@ -4,11 +4,13 @@
 class Model;
 class Mesh;
 class Shader;
+class Engine;
+class Camera;
 
 class Scene
 {
 public:
-	Scene(class Engine* engine);
+	Scene(Engine* engine);
 	~Scene();
 	bool Initialize(float screenWidth, float screenHeight);
 	void Draw();
@@ -17,11 +19,13 @@ public:
 	bool LoadContent();
 	bool LoadShaders();
 
+	auto GetCamera() { return camera; }
+
 private:
-	class Engine* engine;
+	Engine* engine;
 	std::vector<Model*> models;
-	class Shader* meshShader;
-	class Shader* normalShader;
-	class Camera* camera;
+	Shader* meshShader;
+	Shader* normalShader;
+	Camera* camera;
 };
 

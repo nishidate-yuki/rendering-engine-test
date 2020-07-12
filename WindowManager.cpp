@@ -10,26 +10,26 @@ bool WindowManager::Initialize(float screenWidth, float screenHeight)
 	this->screenWidth = screenWidth;
 	this->screenHeight = screenHeight;
 
-	// Set OpenGL attributes
-	// Use the core OpenGL profile
+	// Core profile を使用する
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
-	// Specify version 3.3
+	// Version 3.3
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
-	// Request a color buffer with 8-bits per RGBA channel
+	// Color buffer の設定
 	SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
 	SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
 	SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
 	SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
 	SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE, 24);
-	// Enable double buffering
+	// ダブルバッファリングを有効にする
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-	// Antialiasing
+	// アンチエイリアシング
 	SDL_GL_SetAttribute(SDL_GL_MULTISAMPLEBUFFERS, 1);
 	SDL_GL_SetAttribute(SDL_GL_MULTISAMPLESAMPLES, 4);
-	// Force OpenGL to use hardware acceleration
+	// ハードウェア・アクセラレーションを使用する
 	SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
 
+	// Create window
 	window = SDL_CreateWindow("GameTemplate", 100, 100,
 		static_cast<int>(screenWidth), static_cast<int>(screenHeight), SDL_WINDOW_OPENGL);
 	if (!window) {
@@ -37,7 +37,7 @@ bool WindowManager::Initialize(float screenWidth, float screenHeight)
 		return false;
 	}
 
-	// Create an OpenGL context
+	// Create OpenGL context
 	context = SDL_GL_CreateContext(window);
 
 	// Initialize GLEW

@@ -3,6 +3,7 @@
 #include <SDL2/SDL.h>
 #include "Renderer.h"
 #include "WindowManager.h"
+#include "InputManager.h"
 #include "Scene.h"
 
 Engine::Engine()
@@ -40,7 +41,13 @@ bool Engine::Initialize()
 	renderer = new Renderer(this);
 	renderer->Initialize(windowManager, scene);
 
+	// Create InputManager
+	inputManager = new InputManager(this);
+	inputManager->Initialize(scene);
+
 	ticksCount = SDL_GetTicks();
+
+	SDL_ShowCursor(false);
 
 	return true;
 }
@@ -60,14 +67,7 @@ void Engine::Shutdown()
 
 void Engine::ProcessInput()
 {
-	SDL_Event event;
-	while (SDL_PollEvent(&event)) {
-		switch (event.type) {
-			case SDL_QUIT:
-				isRunning = false;
-				break;
-		}
-	}
+	inputManager->ProcessInput();
 }
 
 void Engine::Update()
