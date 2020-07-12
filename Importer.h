@@ -11,15 +11,21 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 class Model;
+class Texture;
 
-namespace Importer
+class Importer
 {
-	bool CheckFileValidity(const std::string& filePath);
-	std::string GetFileExtension(const std::string& filePath);
+public:
+	static bool CheckFileValidity(const std::string& filePath);
+	static std::string GetFileExtension(const std::string& filePath);
 
-	Model* ImportModel(std::string path);
-	void ProcessNode(Model* model, aiNode* node, const aiScene* scene);
-	Mesh* ProcessMesh(aiMesh* mesh, const aiScene* scene);
+	static Model* ImportModel(std::string path);
+	static void ProcessNode(aiNode* node, const aiScene* scene);
+	static Mesh* ProcessMesh(aiMesh* mesh, const aiScene* scene);
+	static std::vector<unsigned int> ProcessTextures(const aiMaterial* material);
 
+private:
+	static Model* model;
+	static std::unordered_map<std::string, Texture> textureMap;
+	static std::string directory, fileExtension;
 };
-

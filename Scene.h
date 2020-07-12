@@ -11,8 +11,8 @@ public:
 	Scene(class Engine* engine);
 	~Scene();
 	bool Initialize(float screenWidth, float screenHeight);
-	//void Draw(Shader* shader);
 	void Draw();
+	void Update(float deltaTime);
 
 	bool LoadContent();
 	bool LoadShaders();

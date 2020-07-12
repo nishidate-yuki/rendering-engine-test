@@ -2,9 +2,11 @@
 #include "Model.h"
 #include <iostream>
 
-namespace Importer
-{
-bool CheckFileValidity(const std::string& filePath)
+// staticƒƒ“ƒo•Ï”‚ÍŽÀ‘Ì‚ðì‚é•K—v‚ª‚ ‚é
+Model* Importer::model;
+std::string Importer::directory, Importer::fileExtension;
+
+bool Importer::CheckFileValidity(const std::string& filePath)
 {
 	struct stat info;
 	//file is blocking access or read 
@@ -24,7 +26,7 @@ bool CheckFileValidity(const std::string& filePath)
 	}
 }
 
-std::string GetFileExtension(const std::string& filePath)
+std::string Importer::GetFileExtension(const std::string& filePath)
 {
 	size_t indexLocation = filePath.rfind('.', filePath.length());
 	if (indexLocation != std::string::npos) {
@@ -33,39 +35,44 @@ std::string GetFileExtension(const std::string& filePath)
 	return "";
 }
 
-Model* ImportModel(std::string path)
+Model* Importer::ImportModel(std::string path)
 {
-	Model* model = new Model();
+	//Model* model = new Model();
+	model = new Model();
 
 	Assimp::Importer importer;
-	const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_OptimizeMeshes | aiProcess_CalcTangentSpace | aiProcess_FlipUVs);
+	const aiScene* scene = importer.ReadFile(path, 
+		aiProcess_Triangulate | aiProcess_OptimizeMeshes 
+		| aiProcess_CalcTangentSpace | aiProcess_FlipUVs);
 
 	//useful for texture indexing later
-	auto fileExtension = GetFileExtension(path);
-	auto directory = path.substr(0, path.find_last_of('/'));
+	fileExtension = GetFileExtension(path);
+	directory = path.substr(0, path.find_last_of('/'));
 	directory += "/";
 
 	//begin recursive processing of loaded model
-	ProcessNode(model, scene->mRootNode, scene);
+	ProcessNode(scene->mRootNode, scene);
 
 	return model;
 }
 
-void ProcessNode(Model* model, aiNode* node, const aiScene* scene)
+void Importer::ProcessNode(aiNode* node, const aiScene* scene)
 {
 	//Process all the node meshes
+	std::cout << "NumMeshes: " << node->mNumMeshes << std::endl;
 	for (unsigned int i = 0; i < node->mNumMeshes; i++) {
 		aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
 		model->meshes.push_back(ProcessMesh(mesh, scene));
 	}
 
 	//process all the node children recursively
+	std::cout << "NumChildren: " << node->mNumChildren << std::endl;
 	for (unsigned int i = 0; i < node->mNumChildren; i++) {
-		ProcessNode(model, node->mChildren[i], scene);
+		ProcessNode(node->mChildren[i], scene);
 	}
 }
 
-Mesh* ProcessMesh(aiMesh* mesh, const aiScene* scene)
+Mesh* Importer::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 {
 	std::vector<Vertex> vertices;
 	std::vector<unsigned int> indices;
@@ -76,41 +83,34 @@ Mesh* ProcessMesh(aiMesh* mesh, const aiScene* scene)
 	for (unsigned int i = 0; i < mesh->mNumVertices; ++i) {
 		//Process vertex positions, normals, tangents, bitangents, and texture coordinates
 		Vertex vertex;
-		glm::vec3 vector;
 
 		//Process position
-		vector.x = mesh->mVertices[i].x;
-		vector.y = mesh->mVertices[i].y;
-		vector.z = mesh->mVertices[i].z;
-		vertex.position = vector;
+		vertex.position.x = mesh->mVertices[i].x;
+		vertex.position.y = mesh->mVertices[i].y;
+		vertex.position.z = mesh->mVertices[i].z;
 
 		////Process tangent
-		//vector.x = mesh->mTangents[i].x;
-		//vector.y = mesh->mTangents[i].y;
-		//vector.z = mesh->mTangents[i].z;
-		//vertex.tangent = vector;
+		vertex.tangent.x = mesh->mTangents[i].x;
+		vertex.tangent.y = mesh->mTangents[i].y;
+		vertex.tangent.z = mesh->mTangents[i].z;
 
 		////Process biTangent
-		//vector.x = mesh->mBitangents[i].x;
-		//vector.y = mesh->mBitangents[i].y;
-		//vector.z = mesh->mBitangents[i].z;
-		//vertex.biTangent = vector;
+		vertex.biTangent.x = mesh->mBitangents[i].x;
+		vertex.biTangent.y = mesh->mBitangents[i].y;
+		vertex.biTangent.z = mesh->mBitangents[i].z;
 
 		//Process normals
-		vector.x = mesh->mNormals[i].x;
-		vector.y = mesh->mNormals[i].y;
-		vector.z = mesh->mNormals[i].z;
-		vertex.normal = vector;
+		vertex.normal.x = mesh->mNormals[i].x;
+		vertex.normal.y = mesh->mNormals[i].y;
+		vertex.normal.z = mesh->mNormals[i].z;
 
 		//Process texture coords
-		//if (mesh->HasTextureCoords(0)) {
-		//	glm::vec2 vec;
-		//	vec.x = mesh->mTextureCoords[0][i].x;
-		//	vec.y = mesh->mTextureCoords[0][i].y;
-		//	vertex.texCoords = vec;
-		//} else {
-		//	vertex.texCoords = glm::vec2(0.0f, 0.0f);
-		//}
+		if (mesh->HasTextureCoords(0)) {
+			vertex.texCoords.x = mesh->mTextureCoords[0][i].x;
+			vertex.texCoords.y = mesh->mTextureCoords[0][i].y;
+		} else {
+			vertex.texCoords = glm::vec2(0.0f, 0.0f);
+		}
 
 		vertices.push_back(vertex);
 	}
@@ -125,11 +125,57 @@ Mesh* ProcessMesh(aiMesh* mesh, const aiScene* scene)
 	}
 
 	//Process material and texture info
-	//aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
-	//textures = processTextures(material);
+	aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
+	std::cout <<"NumProperties: " << material->mNumProperties << std::endl;
+	//textures = ProcessTextures(material);
 
-	auto newMesh = new Mesh(vertices, indices);
-	return newMesh;
+	return new Mesh(vertices, indices);
 }
-
-}
+//
+//std::vector<unsigned int> Importer::ProcessTextures(const aiMaterial* material)
+//{
+//	std::vector<unsigned int> textures;
+//
+//	//Finding current texture directory
+//	aiString texturePath;
+//	aiTextureType type;
+//	std::string fullTexturePath;
+//
+//	//Checking all texture stacks for each texture type
+//	//Checkout assimp docs on texture types
+//	for (int tex = aiTextureType_NONE; tex <= aiTextureType_UNKNOWN; tex++) {
+//		type = static_cast<aiTextureType>(tex); //making the int value into the enum value
+//		fullTexturePath = directory;
+//
+//		//If there are any textures of the given type in the material
+//		if (material->GetTextureCount(type) > 0) {
+//			//We only care about the first texture assigned we don't expect multiple to be assigned
+//			material->GetTexture(type, 0, &texturePath);
+//			fullTexturePath = fullTexturePath.append(texturePath.C_Str());
+//
+//			//If this texture has not been added to the atlas yet we load it
+//			if (textureMap.count(fullTexturePath) == 0) {
+//				Texture texture;
+//				bool srgb = false;
+//				texture.loadTexture(fullTexturePath, srgb);
+//				textureMap.insert({ fullTexturePath, texture });
+//			}
+//
+//			//We add it to the texture index array of loaded texture for a given mesh
+//			textures.push_back(textureMap.at(fullTexturePath).textureID);
+//		} else {
+//			//For now we always assume that these textures will exist in the current
+//			//material. If they do not, we assign 0 to their value.
+//			//This will be fixed when the new material model is implemented.
+//			switch (type) {
+//				case aiTextureType_LIGHTMAP:
+//				case aiTextureType_EMISSIVE:
+//				case aiTextureType_NORMALS:
+//				case aiTextureType_UNKNOWN:
+//					textures.push_back(0);
+//					break;
+//			}
+//		}
+//	}
+//	return textures;
+//}

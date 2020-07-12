@@ -72,11 +72,17 @@ void Engine::ProcessInput()
 
 void Engine::Update()
 {
+	// 16msŒo‚Â‚Ü‚Å‘Ò‚Â
 	while (!SDL_TICKS_PASSED(SDL_GetTicks(), ticksCount + 16)) {
 		// pass
 	}
-
+	float deltaTime = (SDL_GetTicks() - ticksCount) / 1000.0f;
+	if (deltaTime > 0.05f) {
+		deltaTime = 0.05f;
+	}
 	ticksCount = SDL_GetTicks();
+
+	scene->Update(deltaTime);
 }
 
 void Engine::Render()

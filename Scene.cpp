@@ -40,14 +40,25 @@ void Scene::Draw()
 	}
 }
 
+void Scene::Update(float deltaTime)
+{
+	for (auto model : models) {
+		model->Update(deltaTime);
+	}
+}
+
+
 bool Scene::LoadContent()
 {
 	//Model* model = new Model();
 	//model->LoadQuad();
 	//models.push_back(model);
 
-	Model* bunny = Importer::ImportModel("Assets/bunny.fbx");
-	models.push_back(bunny);
+	//Model* model = Importer::ImportModel("Assets/bunny.fbx");
+	//Model* model = Importer::ImportModel("Assets/Cube.fbx");
+	//model->SetScale(glm::vec3(0.01f));
+	Model* model = Importer::ImportModel("Assets/DamagedHelmet/glTF/DamagedHelmet.gltf");
+	models.push_back(model);
 
 	return true;
 }
