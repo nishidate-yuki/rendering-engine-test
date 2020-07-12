@@ -47,8 +47,6 @@ bool Engine::Initialize()
 
 	ticksCount = SDL_GetTicks();
 
-	SDL_ShowCursor(false);
-
 	return true;
 }
 
