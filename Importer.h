@@ -22,7 +22,7 @@ public:
 	static Model* ImportModel(std::string path);
 	static void ProcessNode(aiNode* node, const aiScene* scene);
 	static Mesh* ProcessMesh(aiMesh* mesh, const aiScene* scene);
-	static std::vector<unsigned int> ProcessTextures(const aiMaterial* material);
+	static std::vector<Texture> ProcessTextures(const aiMaterial* material);
 
 private:
 	static Model* model;

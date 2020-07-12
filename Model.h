@@ -22,8 +22,4 @@ public:
 
 private:
 	glm::mat4 modelMatrix;
-
-	//To avoid textures being loaded from disk more than once they are indexed into a dictionary
-	//std::unordered_map<std::string, Texture> textureAtlas;
-	//std::string directory, fileExtension;
 };

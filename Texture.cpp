@@ -31,6 +31,7 @@ bool Texture::Load(const std::string& filePath)
 		format = GL_RGBA;
 	}
 
+	// Generate texture (Get texture ID on GPU)
 	glGenTextures(1, &textureID);
 	glBindTexture(GL_TEXTURE_2D, textureID);
 	glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);

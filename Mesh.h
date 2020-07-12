@@ -5,6 +5,7 @@
 
 class VertexArray;
 class Shader;
+class Texture;
 
 struct Vertex
 {
@@ -18,14 +19,15 @@ struct Vertex
 class Mesh
 {
 public:
-	Mesh();
-	Mesh(std::vector<Vertex>& vertices,
-		 std::vector<unsigned int>& indices);
+	Mesh(const std::vector<Vertex>& vertices,
+		const std::vector<unsigned int>& indices,
+		const std::vector<Texture>& textures);
 
 	void Draw(Shader* shader);
 
 private:
 	VertexArray* vertexArray;
+	std::vector<Texture> textures;
 
 	//std::string shaderName;
 };

@@ -1,25 +1,28 @@
 #include "Importer.h"
 #include "Model.h"
+#include "Texture.h"
 #include <iostream>
 
 // staticメンバ変数は実体を作る必要がある
+// Importer:: をつけるのを忘れないようにする
 Model* Importer::model;
 std::string Importer::directory, Importer::fileExtension;
+std::unordered_map<std::string, Texture> Importer::textureMap;
 
 bool Importer::CheckFileValidity(const std::string& filePath)
 {
 	struct stat info;
-	//file is blocking access or read 
+	// file is blocking access or read 
 	if (stat(filePath.c_str(), &info) != 0) {
 		printf("Cannot access %s\n", filePath.c_str());
 		return false;
 	}
-	//file is accessible
+	// file is accessible
 	else if (info.st_mode & S_IFMT) {
 		printf("%s is a valid file\n", filePath.c_str());
 		return true;
 	}
-	//File does not exist
+	// File does not exist
 	else {
 		printf("Error! File: %s does not exist.\n", filePath.c_str());
 		return false;
@@ -37,7 +40,6 @@ std::string Importer::GetFileExtension(const std::string& filePath)
 
 Model* Importer::ImportModel(std::string path)
 {
-	//Model* model = new Model();
 	model = new Model();
 
 	Assimp::Importer importer;
@@ -45,12 +47,12 @@ Model* Importer::ImportModel(std::string path)
 		aiProcess_Triangulate | aiProcess_OptimizeMeshes 
 		| aiProcess_CalcTangentSpace | aiProcess_FlipUVs);
 
-	//useful for texture indexing later
+	// useful for texture indexing later
 	fileExtension = GetFileExtension(path);
 	directory = path.substr(0, path.find_last_of('/'));
 	directory += "/";
 
-	//begin recursive processing of loaded model
+	// ルートからノードを再帰処理
 	ProcessNode(scene->mRootNode, scene);
 
 	return model;
@@ -58,14 +60,14 @@ Model* Importer::ImportModel(std::string path)
 
 void Importer::ProcessNode(aiNode* node, const aiScene* scene)
 {
-	//Process all the node meshes
+	// Meshes
 	std::cout << "NumMeshes: " << node->mNumMeshes << std::endl;
 	for (unsigned int i = 0; i < node->mNumMeshes; i++) {
 		aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
 		model->meshes.push_back(ProcessMesh(mesh, scene));
 	}
 
-	//process all the node children recursively
+	// Children を再帰処理
 	std::cout << "NumChildren: " << node->mNumChildren << std::endl;
 	for (unsigned int i = 0; i < node->mNumChildren; i++) {
 		ProcessNode(node->mChildren[i], scene);
@@ -76,35 +78,34 @@ Mesh* Importer::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 {
 	std::vector<Vertex> vertices;
 	std::vector<unsigned int> indices;
-	std::vector<unsigned int> textures;
+	std::vector<Texture> textures;
 
 	//Process vertices
 	std::cout << "NumVertices: " << mesh->mNumVertices << std::endl;
 	for (unsigned int i = 0; i < mesh->mNumVertices; ++i) {
-		//Process vertex positions, normals, tangents, bitangents, and texture coordinates
 		Vertex vertex;
 
-		//Process position
+		// Position
 		vertex.position.x = mesh->mVertices[i].x;
 		vertex.position.y = mesh->mVertices[i].y;
 		vertex.position.z = mesh->mVertices[i].z;
 
-		////Process tangent
+		// Tangent
 		vertex.tangent.x = mesh->mTangents[i].x;
 		vertex.tangent.y = mesh->mTangents[i].y;
 		vertex.tangent.z = mesh->mTangents[i].z;
 
-		////Process biTangent
+		// BiTangent
 		vertex.biTangent.x = mesh->mBitangents[i].x;
 		vertex.biTangent.y = mesh->mBitangents[i].y;
 		vertex.biTangent.z = mesh->mBitangents[i].z;
 
-		//Process normals
+		// Normal
 		vertex.normal.x = mesh->mNormals[i].x;
 		vertex.normal.y = mesh->mNormals[i].y;
 		vertex.normal.z = mesh->mNormals[i].z;
 
-		//Process texture coords
+		// Texture coordinates
 		if (mesh->HasTextureCoords(0)) {
 			vertex.texCoords.x = mesh->mTextureCoords[0][i].x;
 			vertex.texCoords.y = mesh->mTextureCoords[0][i].y;
@@ -115,7 +116,7 @@ Mesh* Importer::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 		vertices.push_back(vertex);
 	}
 
-	//Process indices
+	// Index
 	std::cout << "NumFaces: " << mesh->mNumFaces << std::endl;
 	for (unsigned int i = 0; i < mesh->mNumFaces; ++i) {
 		aiFace face = mesh->mFaces[i];
@@ -124,58 +125,67 @@ Mesh* Importer::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 		}
 	}
 
-	//Process material and texture info
+	// Material / Texture
 	aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
-	std::cout <<"NumProperties: " << material->mNumProperties << std::endl;
-	//textures = ProcessTextures(material);
+	textures = ProcessTextures(material);
+	std::cout << "NumTextures: " << textures.size() << std::endl;
 
-	return new Mesh(vertices, indices);
+	return new Mesh(vertices, indices, textures);
 }
-//
-//std::vector<unsigned int> Importer::ProcessTextures(const aiMaterial* material)
-//{
-//	std::vector<unsigned int> textures;
-//
-//	//Finding current texture directory
-//	aiString texturePath;
-//	aiTextureType type;
-//	std::string fullTexturePath;
-//
-//	//Checking all texture stacks for each texture type
-//	//Checkout assimp docs on texture types
-//	for (int tex = aiTextureType_NONE; tex <= aiTextureType_UNKNOWN; tex++) {
-//		type = static_cast<aiTextureType>(tex); //making the int value into the enum value
-//		fullTexturePath = directory;
-//
-//		//If there are any textures of the given type in the material
-//		if (material->GetTextureCount(type) > 0) {
-//			//We only care about the first texture assigned we don't expect multiple to be assigned
-//			material->GetTexture(type, 0, &texturePath);
-//			fullTexturePath = fullTexturePath.append(texturePath.C_Str());
-//
-//			//If this texture has not been added to the atlas yet we load it
-//			if (textureMap.count(fullTexturePath) == 0) {
-//				Texture texture;
-//				bool srgb = false;
-//				texture.loadTexture(fullTexturePath, srgb);
-//				textureMap.insert({ fullTexturePath, texture });
-//			}
-//
-//			//We add it to the texture index array of loaded texture for a given mesh
-//			textures.push_back(textureMap.at(fullTexturePath).textureID);
-//		} else {
-//			//For now we always assume that these textures will exist in the current
-//			//material. If they do not, we assign 0 to their value.
-//			//This will be fixed when the new material model is implemented.
-//			switch (type) {
-//				case aiTextureType_LIGHTMAP:
-//				case aiTextureType_EMISSIVE:
-//				case aiTextureType_NORMALS:
-//				case aiTextureType_UNKNOWN:
-//					textures.push_back(0);
-//					break;
-//			}
-//		}
-//	}
-//	return textures;
-//}
+
+std::vector<Texture> Importer::ProcessTextures(const aiMaterial* material)
+{
+	std::vector<Texture> textures;
+
+	aiString texturePath;
+	aiTextureType type;
+	std::string fullTexturePath;
+
+	// -------------- aiTextureType --------------
+	// aiTextureType_NONE				= 0
+	// aiTextureType_DIFFUSE			= 1
+	// aiTextureType_SPECULAR			= 2
+	// aiTextureType_AMBIENT			= 3
+	// aiTextureType_EMISSIVE			= 4
+	// aiTextureType_HEIGHT				= 5
+    // aiTextureType_NORMALS			= 6
+	// aiTextureType_SHININESS			= 7
+	// aiTextureType_OPACITY			= 8
+	// aiTextureType_DISPLACEMENT		= 9
+	// aiTextureType_LIGHTMAP			= 10
+	// aiTextureType_REFLECTION			= 11
+	// aiTextureType_BASE_COLOR			= 12
+	// aiTextureType_NORMAL_CAMERA		= 13
+	// aiTextureType_EMISSION_COLOR		= 14
+	// aiTextureType_METALNESS			= 15
+	// aiTextureType_DIFFUSE_ROUGHNESS  = 16
+	// aiTextureType_AMBIENT_OCCLUSION  = 17
+	// aiTextureType_UNKNOWN			= 18
+	// -------------------------------------------
+
+	// 各テクスチャタイプごとにスタックをチェックする
+	for (int tex = aiTextureType_NONE; tex <= aiTextureType_UNKNOWN; tex++) {
+		type = static_cast<aiTextureType>(tex); //　int -> enum
+		fullTexturePath = directory;
+
+		// マテリアルに指定されたタイプのテクスチャがある場合
+		if (material->GetTextureCount(type) > 0) {
+			// 最初に割り当てられたテクスチャのみに対応している
+			// つまり、各テクスチャタイプごとに1枚だけ読み込む
+			material->GetTexture(type, 0, &texturePath);
+			fullTexturePath = fullTexturePath.append(texturePath.C_Str());
+
+			// テクスチャマップにまだ無い場合はロードする
+			if (textureMap.count(fullTexturePath) == 0) {
+				Texture texture;
+				texture.Load(fullTexturePath);
+				textureMap.insert({ fullTexturePath, texture });
+				std::cout << "FullTexturePath:" << fullTexturePath << std::endl;
+			}
+
+			// テクスチャ配列に追加
+			textures.push_back(textureMap.at(fullTexturePath));
+		}
+	}
+	return textures;
+}

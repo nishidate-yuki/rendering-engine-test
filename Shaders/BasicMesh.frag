@@ -1,17 +1,17 @@
 #version 330
 
-// Tex coord input from vertex shader
+// positionˆÈŠO‚Ì“ü—Í
 in vec2 fragTexCoord;
+in vec3 fragNormal;
+in vec3 fragWorldPos;
 
-// This corresponds to the output color to the color buffer
 out vec4 outColor;
 
-// This is used for the texture sampling
+// for texture sampling
 uniform sampler2D uTexture;
 
 void main()
 {
 	// Sample color from texture
-//    outColor = texture(uTexture, fragTexCoord);
-    outColor = vec4(1, 1, 1, 1);
+    outColor = texture(uTexture, fragTexCoord);
 }

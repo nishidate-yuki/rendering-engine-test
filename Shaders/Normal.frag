@@ -6,9 +6,10 @@ in vec3 fragWorldPos;
 
 out vec4 outColor;
 
+// for texture sampling
 uniform sampler2D uTexture;
 
 void main()
 {
-    outColor = vec4(fragNormal+0.5, 1.0);
+	outColor = vec4(fragNormal+0.5, 1.0);
 }

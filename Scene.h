@@ -21,6 +21,7 @@ private:
 	class Engine* engine;
 	std::vector<Model*> models;
 	class Shader* meshShader;
+	class Shader* normalShader;
 	class Camera* camera;
 };
 

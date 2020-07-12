@@ -50,13 +50,7 @@ void Scene::Update(float deltaTime)
 
 bool Scene::LoadContent()
 {
-	//Model* model = new Model();
-	//model->LoadQuad();
-	//models.push_back(model);
-
 	//Model* model = Importer::ImportModel("Assets/bunny.fbx");
-	//Model* model = Importer::ImportModel("Assets/Cube.fbx");
-	//model->SetScale(glm::vec3(0.01f));
 	Model* model = Importer::ImportModel("Assets/DamagedHelmet/glTF/DamagedHelmet.gltf");
 	models.push_back(model);
 
@@ -66,9 +60,12 @@ bool Scene::LoadContent()
 bool Scene::LoadShaders()
 {
 	meshShader = new Shader();
-	if (!meshShader->Load("Shaders/Normal.vert", "Shaders/Normal.frag")) {
+	if (!meshShader->Load("Shaders/BasicMesh.vert", "Shaders/BasicMesh.frag")) {
 		return false;
 	}
-	meshShader->SetActive();
+	//normalShader = new Shader();
+	//if (!normalShader->Load("Shaders/Normal.vert", "Shaders/Normal.frag")) {
+	//	return false;
+	//}
 	return true;
 }
