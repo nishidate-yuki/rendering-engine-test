@@ -1,7 +1,7 @@
 #version 330
 
 // world transform / view-proj
-uniform mat4 uWorldTransform;
+uniform mat4 uModel;
 uniform mat4 uViewProj;
 
 // position, normal, tex coords.
@@ -17,11 +17,11 @@ out vec3 fragWorldPos;
 void main()
 {
 	vec4 pos = vec4(inPosition, 1.0);
-	pos = uWorldTransform * pos;
+	pos = uModel * pos;
 	fragWorldPos = pos.xyz;
 	gl_Position = uViewProj * pos;
 
-	fragNormal = (vec4(inNormal, 0.0f) * uWorldTransform).xyz;
+	fragNormal = (vec4(inNormal, 0.0f) * uModel).xyz;
 
 	fragTexCoord = inTexCoord;
 }

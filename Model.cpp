@@ -19,7 +19,7 @@ void Model::Update(float deltaTime)
 
 void Model::Draw(Shader* shader)
 {
-	shader->SetMatrixUniform("uWorldTransform", modelMatrix);
+	shader->SetMatrixUniform("uModel", modelMatrix);
 	for (auto mesh : meshes) {
 		mesh->Draw(shader);
 	}
