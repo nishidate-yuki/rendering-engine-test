@@ -1,8 +1,10 @@
 #include "Model.h"
 #include "Shader.h"
 #include "Mesh.h"
+#include <iostream>
 #include <glm/gtc/matrix_transform.hpp> 
 #include <glm/gtx/transform.hpp>
+#include <glm/gtx/string_cast.hpp>
 
 Model::Model()
 	: modelMatrix(1.0f)

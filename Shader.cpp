@@ -57,7 +57,8 @@ void Shader::SetMatrixUniform(const char* name, const glm::mat4& matrix)
 	// Find the uniform by this name
 	GLuint loc = glGetUniformLocation(shaderProgram, name);
 	// Send the matrix data to the uniform
-	glUniformMatrix4fv(loc, 1, GL_TRUE, glm::value_ptr(matrix));
+	// 第3引数: 行ベクトルを使うならTRUE
+	glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(matrix));
 }
 
 void Shader::SetVectorUniform(const char* name, const glm::vec3& vector)

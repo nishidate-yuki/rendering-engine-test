@@ -19,7 +19,6 @@ public:
 	void Shutdown();
 
 	void ProcessInput();
-	void ProcessEvent(const SDL_Event& event);
 
 private:
 	Engine* engine;

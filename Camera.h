@@ -14,6 +14,8 @@ public:
 
 	// PV
 	auto GetViewProjection() { return projection * view; }
+	auto GetViewMatrix() { return view; }
+	auto GetProjectionMatrix() { return projection; }
 
 private:
 	glm::vec3 position;
@@ -23,7 +25,7 @@ private:
 	glm::mat4 projection;
 
 	float screenWidth, screenHeight;
-
+	float fov;
 	float pitch, yaw, zDistance;
 };
 

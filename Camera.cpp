@@ -13,6 +13,7 @@ Camera::Camera(float screenWidth, float screenHeight)
 	, zDistance(4.0)
 	, yaw(45.0)
 	, pitch(-15.0)
+	, fov(60.0)
 {
 	// Calc position from rotation
 	position = glm::vec3(0, 0, zDistance);
@@ -36,8 +37,8 @@ void Camera::Update()
 	rotationMatrix *= glm::rotate(glm::radians(pitch), X_UNIT);
 	position = glm::vec3(rotationMatrix * glm::vec4(position, 1.0));
 
-	// Set View/Projection
+	// Calc View/Projection
 	view = glm::lookAt(position, target, Y_UNIT);
-	projection = glm::perspective(glm::radians(60.0f),
+	projection = glm::perspective(glm::radians(fov),
 		screenWidth / screenHeight, 0.01f, 100.0f);
 }
