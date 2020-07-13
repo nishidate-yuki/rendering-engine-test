@@ -1,5 +1,9 @@
 #pragma once
 #include <SDL2/SDL_types.h>
+class WindowManager;
+class InputManager;
+class Renderer;
+class Scene;
 
 class Engine
 {
@@ -19,10 +23,10 @@ private:
 	void Render();
 	void LoadData();
 
-	class WindowManager* windowManager;
-	class InputManager* inputManager;
-	class Renderer* renderer;
-	class Scene* scene;
+	WindowManager* windowManager;
+	InputManager* inputManager;
+	Renderer* renderer;
+	Scene* scene;
 	Uint32 ticksCount;
 	bool isRunning;
 };

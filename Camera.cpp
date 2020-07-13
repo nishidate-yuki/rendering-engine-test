@@ -6,7 +6,7 @@
 auto X_UNIT = glm::vec3(1.0, 0.0, 0.0);
 auto Y_UNIT = glm::vec3(0.0, 1.0, 0.0);
 
-Camera::Camera(float screenWidth, float screenHeight)
+Camera::Camera(const float screenWidth, const float screenHeight)
 	: target(0.0f, 0.0f, 0.0f)
 	, screenWidth(screenWidth)
 	, screenHeight(screenHeight)

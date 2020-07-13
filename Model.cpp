@@ -11,7 +11,7 @@ Model::Model()
 {
 }
 
-void Model::Update(float deltaTime)
+void Model::Update(const float deltaTime)
 {
 	//glm::mat4 rotateMatrix = glm::rotate(deltaTime, glm::vec3(0, 1, 0));
 	//modelMatrix *= rotateMatrix;
@@ -19,7 +19,7 @@ void Model::Update(float deltaTime)
 
 void Model::Draw(Shader* shader)
 {
-	shader->SetMatrixUniform("uModel", modelMatrix);
+	shader->SetMatrix("uModel", modelMatrix);
 	for (auto mesh : meshes) {
 		mesh->Draw(shader);
 	}

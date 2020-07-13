@@ -3,12 +3,6 @@
 #include "Texture.h"
 #include <iostream>
 
-// staticメンバ変数は実体を作る必要がある
-// Importer:: をつけるのを忘れないようにする
-Model* Importer::model;
-std::string Importer::directory, Importer::fileExtension;
-std::unordered_map<std::string, Texture> Importer::textureMap;
-
 bool Importer::CheckFileValidity(const std::string& filePath)
 {
 	struct stat info;
@@ -40,41 +34,39 @@ std::string Importer::GetFileExtension(const std::string& filePath)
 
 Model* Importer::ImportModel(std::string path)
 {
-	model = new Model();
+	auto model = new Model();
 
 	Assimp::Importer importer;
 	const aiScene* scene = importer.ReadFile(path, 
 		aiProcess_Triangulate | aiProcess_OptimizeMeshes 
 		| aiProcess_CalcTangentSpace | aiProcess_FlipUVs);
 
-	// useful for texture indexing later
-	fileExtension = GetFileExtension(path);
-	directory = path.substr(0, path.find_last_of('/'));
+	auto directory = path.substr(0, path.find_last_of('/'));
 	directory += "/";
 
 	// ルートからノードを再帰処理
-	ProcessNode(scene->mRootNode, scene);
+	ProcessNode(model, scene->mRootNode, scene, directory);
 
 	return model;
 }
 
-void Importer::ProcessNode(aiNode* node, const aiScene* scene)
+void Importer::ProcessNode(Model* model, aiNode* node, const aiScene* scene, std::string directory)
 {
 	// Meshes
 	std::cout << "NumMeshes: " << node->mNumMeshes << std::endl;
 	for (unsigned int i = 0; i < node->mNumMeshes; i++) {
 		aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
-		model->meshes.push_back(ProcessMesh(mesh, scene));
+		model->meshes.push_back(ProcessMesh(mesh, scene, directory));
 	}
 
 	// Children を再帰処理
 	std::cout << "NumChildren: " << node->mNumChildren << std::endl;
 	for (unsigned int i = 0; i < node->mNumChildren; i++) {
-		ProcessNode(node->mChildren[i], scene);
+		ProcessNode(model, node->mChildren[i], scene, directory);
 	}
 }
 
-Mesh* Importer::ProcessMesh(aiMesh* mesh, const aiScene* scene)
+Mesh* Importer::ProcessMesh(aiMesh* mesh, const aiScene* scene, std::string directory)
 {
 	std::vector<Vertex> vertices;
 	std::vector<unsigned int> indices;
@@ -127,13 +119,13 @@ Mesh* Importer::ProcessMesh(aiMesh* mesh, const aiScene* scene)
 
 	// Material / Texture
 	aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
-	textures = ProcessTextures(material);
+	textures = ProcessTextures(material, directory);
 	std::cout << "NumTextures: " << textures.size() << std::endl;
 
 	return new Mesh(vertices, indices, textures);
 }
 
-std::vector<Texture> Importer::ProcessTextures(const aiMaterial* material)
+std::vector<Texture> Importer::ProcessTextures(const aiMaterial* material, std::string directory)
 {
 	std::vector<Texture> textures;
 
@@ -162,6 +154,8 @@ std::vector<Texture> Importer::ProcessTextures(const aiMaterial* material)
 	// aiTextureType_AMBIENT_OCCLUSION  = 17
 	// aiTextureType_UNKNOWN			= 18
 	// -------------------------------------------
+
+	static std::unordered_map<std::string, Texture> textureMap;
 
 	// 各テクスチャタイプごとにスタックをチェックする
 	for (int tex = aiTextureType_NONE; tex <= aiTextureType_UNKNOWN; tex++) {

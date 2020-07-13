@@ -34,7 +34,7 @@ bool Scene::Initialize(float screenWidth, float screenHeight)
 void Scene::Draw()
 {
 	meshShader->SetActive();
-	meshShader->SetMatrixUniform("uViewProj", camera->GetViewProjection());	// Camera
+	meshShader->SetMatrix("uViewProj", camera->GetViewProjection());	// Camera
 	for (auto model : models) {
 		model->Draw(meshShader);
 	}

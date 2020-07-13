@@ -20,12 +20,7 @@ public:
 	static std::string GetFileExtension(const std::string& filePath);
 
 	static Model* ImportModel(std::string path);
-	static void ProcessNode(aiNode* node, const aiScene* scene);
-	static Mesh* ProcessMesh(aiMesh* mesh, const aiScene* scene);
-	static std::vector<Texture> ProcessTextures(const aiMaterial* material);
-
-private:
-	static Model* model;
-	static std::unordered_map<std::string, Texture> textureMap;
-	static std::string directory, fileExtension;
+	static void ProcessNode(Model* model, aiNode* node, const aiScene* scene, std::string directory);
+	static Mesh* ProcessMesh(aiMesh* mesh, const aiScene* scene, std::string directory);
+	static std::vector<Texture> ProcessTextures(const aiMaterial* material, std::string directory);
 };

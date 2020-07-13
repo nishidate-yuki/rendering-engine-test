@@ -46,13 +46,13 @@ void Shader::Unload()
 	glDeleteShader(fragShader);
 }
 
-void Shader::SetActive()
+void Shader::SetActive() const
 {
 	// Set this program as the active one
 	glUseProgram(shaderProgram);
 }
 
-void Shader::SetMatrixUniform(const char* name, const glm::mat4& matrix)
+void Shader::SetMatrix(const char* name, const glm::mat4& matrix)
 {
 	// Find the uniform by this name
 	GLuint loc = glGetUniformLocation(shaderProgram, name);
@@ -61,14 +61,14 @@ void Shader::SetMatrixUniform(const char* name, const glm::mat4& matrix)
 	glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(matrix));
 }
 
-void Shader::SetVectorUniform(const char* name, const glm::vec3& vector)
+void Shader::SetVector(const char* name, const glm::vec3& vector)
 {
 	GLuint loc = glGetUniformLocation(shaderProgram, name);
 	// Send the vector data
 	glUniform3fv(loc, 1, glm::value_ptr(vector));
 }
 
-void Shader::SetFloatUniform(const char* name, float value)
+void Shader::SetFloat(const char* name, float value)
 {
 	GLuint loc = glGetUniformLocation(shaderProgram, name);
 	// Send the float data

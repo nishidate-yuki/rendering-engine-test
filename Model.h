@@ -13,7 +13,7 @@ class Model
 public:
 	Model();
 
-	void Update(float deltaTime);
+	void Update(const float deltaTime);
 	void Draw(Shader* shader);
 
 	std::vector<Mesh*> meshes;

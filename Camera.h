@@ -8,14 +8,11 @@ class Camera
 {
 	friend InputManager;
 public:
-	Camera(float screenWidth, float screenHeight);
+	Camera(const float screenWidth, const float screenHeight);
 
 	void Update();
 
-	// PV
-	auto GetViewProjection() { return projection * view; }
-	auto GetViewMatrix() { return view; }
-	auto GetProjectionMatrix() { return projection; }
+	auto GetViewProjection() const { return projection * view; }
 
 private:
 	glm::vec3 position;
