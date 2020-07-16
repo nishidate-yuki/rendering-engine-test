@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include "Light.h"
 
 class Model;
 class Mesh;
@@ -27,5 +28,7 @@ private:
 	Shader* meshShader;
 	Shader* normalShader;
 	Camera* camera;
+	DirectionalLight dirLight;
+	PointLight pointLight;
 };
 

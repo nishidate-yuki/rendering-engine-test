@@ -35,6 +35,8 @@ void Scene::Draw()
 {
 	meshShader->SetActive();
 	meshShader->SetMatrix("uViewProj", camera->GetViewProjection());	// Camera
+	meshShader->SetDirectionalLight(nullptr, dirLight);	// Light
+
 	for (auto model : models) {
 		model->Draw(meshShader);
 	}
@@ -60,12 +62,9 @@ bool Scene::LoadContent()
 bool Scene::LoadShaders()
 {
 	meshShader = new Shader();
-	if (!meshShader->Load("Shaders/BasicMesh.vert", "Shaders/BasicMesh.frag")) {
+	// Normal, BasicMesh, Lambert
+	if (!meshShader->Load("Shaders/Lambert.vert", "Shaders/Lambert.frag")) {
 		return false;
 	}
-	//normalShader = new Shader();
-	//if (!normalShader->Load("Shaders/Normal.vert", "Shaders/Normal.frag")) {
-	//	return false;
-	//}
 	return true;
 }

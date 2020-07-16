@@ -75,6 +75,14 @@ void Shader::SetFloat(const char* name, float value)
 	glUniform1f(loc, value);
 }
 
+void Shader::SetDirectionalLight(const char* name, const DirectionalLight dirLight)
+{
+	// TODO: ディレクショナルライトも複数必要であればnameを使って動的に送る
+	SetVector("dirLight.color", dirLight.color);
+	SetFloat("dirLight.intensity", dirLight.intensity);
+	SetVector("dirLight.direction", dirLight.direction);
+}
+
 
 bool Shader::CompileShader(const std::string& fileName,
 	GLenum shaderType,

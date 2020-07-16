@@ -2,6 +2,7 @@
 #include <string>
 #include <glm/glm.hpp>
 #include <GL/glew.h>
+#include "Light.h"
 
 class Shader
 {
@@ -16,6 +17,7 @@ public:
 	void SetMatrix(const char* name, const glm::mat4& matrix);
 	void SetVector(const char* name, const glm::vec3& vector);
 	void SetFloat(const char* name, float value);
+	void SetDirectionalLight(const char* name, const DirectionalLight dirLight);
 
 private:
 	bool CompileShader(const std::string& fileName,
