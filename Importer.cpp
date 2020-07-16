@@ -59,7 +59,7 @@ void Importer::ProcessNode(Model* model, aiNode* node, const aiScene* scene, std
 		model->meshes.push_back(ProcessMesh(mesh, scene, directory));
 	}
 
-	// Children を再帰処理
+	// Childrenへ再帰
 	std::cout << "NumChildren: " << node->mNumChildren << std::endl;
 	for (unsigned int i = 0; i < node->mNumChildren; i++) {
 		ProcessNode(model, node->mChildren[i], scene, directory);
@@ -128,6 +128,7 @@ Mesh* Importer::ProcessMesh(aiMesh* mesh, const aiScene* scene, std::string dire
 std::vector<Texture> Importer::ProcessTextures(const aiMaterial* material, std::string directory)
 {
 	std::vector<Texture> textures;
+	std::unordered_map<std::string, Texture> textureMap;
 
 	aiString texturePath;
 	aiTextureType type;
@@ -155,11 +156,9 @@ std::vector<Texture> Importer::ProcessTextures(const aiMaterial* material, std::
 	// aiTextureType_UNKNOWN			= 18
 	// -------------------------------------------
 
-	static std::unordered_map<std::string, Texture> textureMap;
-
 	// 各テクスチャタイプごとにスタックをチェックする
 	for (int tex = aiTextureType_NONE; tex <= aiTextureType_UNKNOWN; tex++) {
-		type = static_cast<aiTextureType>(tex); //　int -> enum
+		type = static_cast<aiTextureType>(tex); //　int -> aiTextureType
 		fullTexturePath = directory;
 
 		// マテリアルに指定されたタイプのテクスチャがある場合
@@ -174,7 +173,7 @@ std::vector<Texture> Importer::ProcessTextures(const aiMaterial* material, std::
 				Texture texture;
 				texture.Load(fullTexturePath);
 				textureMap.insert({ fullTexturePath, texture });
-				std::cout << "FullTexturePath:" << fullTexturePath << std::endl;
+				std::cout << "FullTexturePath: " << fullTexturePath << std::endl;
 			}
 
 			// テクスチャ配列に追加
