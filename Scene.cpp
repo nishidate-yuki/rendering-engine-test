@@ -66,8 +66,8 @@ bool Scene::LoadContent()
 bool Scene::LoadShaders()
 {
 	meshShader = new Shader();
-	// Normal, BasicMesh, Lambert
-	if (!meshShader->Load("Shaders/Lambert.vert", "Shaders/Lambert.frag")) {
+	// Normal, BasicMesh, Lambert, NormalMapping
+	if (!meshShader->Load("Shaders/NormalMapping.vert", "Shaders/NormalMapping.frag")) {
 		return false;
 	}
 	return true;
