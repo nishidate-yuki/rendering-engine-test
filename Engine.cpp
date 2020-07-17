@@ -6,10 +6,12 @@
 #include "InputManager.h"
 
 Engine::Engine()
-	: renderer(nullptr)
-	, isRunning(true)
+	: isRunning(true)
 	, scene(this)
 {
+	renderer = new Renderer(this);
+	inputManager = new InputManager(this);
+	windowManager = new WindowManager(this);
 }
 
 Engine::~Engine()
@@ -26,23 +28,16 @@ bool Engine::Initialize()
 	float screenWidth = 1024.0f;
 	float screenHeight = 768.0f;
 
-	// Create window manager
-	windowManager = new WindowManager(this);
-	if (!windowManager->Initialize(screenWidth, screenHeight)) {
-		SDL_Log("Failed to initialize window manager");
+	// Initialize vars
+	bool success = true;
+	success &= windowManager->Initialize(screenWidth, screenHeight);
+	success &= scene.Initialize(screenWidth, screenHeight);
+	success &= renderer->Initialize(windowManager, &scene);
+	success &= inputManager->Initialize(&scene);
+	if (!success) {
+		SDL_Log("Failed to initialize");
 		return false;
 	}
-
-	// Initialize scene
-	scene.Initialize(screenWidth, screenHeight);
-
-	// Create renderer
-	renderer = new Renderer(this);
-	renderer->Initialize(windowManager, &scene);
-
-	// Create InputManager
-	inputManager = new InputManager(this);
-	inputManager->Initialize(&scene);
 
 	ticksCount = SDL_GetTicks();
 
