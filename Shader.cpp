@@ -71,6 +71,12 @@ void Shader::SetFloat(const char* name, float value)
 	glUniform1f(loc, value);
 }
 
+void Shader::SetInt(const char* name, int value)
+{
+	GLuint loc = glGetUniformLocation(shaderProgram, name);
+	glUniform1i(loc, value);
+}
+
 void Shader::SetDirectionalLight(const std::string name, const DirectionalLight dirLight)
 {
 	SetVector((name + ".color").c_str(), dirLight.color);

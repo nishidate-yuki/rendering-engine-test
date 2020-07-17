@@ -12,11 +12,14 @@ struct DirectionalLight
 in vec2 fragTexCoord;
 in vec3 fragNormal;
 in vec3 fragWorldPos;
+in mat3 TBN;	// [Tan, BiTan, Norm] fro Normal mapping
 
 out vec4 outColor;
 
 // for texture sampling
-uniform sampler2D uTexture;
+uniform sampler2D uDiffuse;
+uniform sampler2D uNormalMap;
+uniform sampler2D uEmissiveMap;
 
 // Light
 uniform DirectionalLight uDirLight;
@@ -29,6 +32,6 @@ void main()
 	vec3 Diffuse = vec3(dot(N, L));
 
 	// Sample color from texture
-    outColor = texture(uTexture, fragTexCoord);
+    outColor = texture(uDiffuse, fragTexCoord);
 	outColor *= vec4(Diffuse, 1.0);
 }

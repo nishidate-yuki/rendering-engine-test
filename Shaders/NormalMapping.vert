@@ -26,7 +26,7 @@ void main()
 
 	// w=0として平行移動を無効化する
 	// 非一様スケーリングを行う場合は法線行列をちゃんと計算する必要がある
-	fragNormal = (uModel * vec4(inNormal, 0.0f)).xyz;
+	fragNormal = (uModel * vec4(inNormal, 0.0)).xyz;
 
 	// for Normal mapping
 	vec3 T = normalize(vec3(uModel * vec4(inTangent,   0.0)));

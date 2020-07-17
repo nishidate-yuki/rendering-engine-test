@@ -174,7 +174,7 @@ std::vector<Texture> Importer::ProcessTextures(const aiMaterial* material, std::
 				Texture texture;
 				texture.Load(fullTexturePath);
 				textureMap.insert({ fullTexturePath, texture });
-				std::cout << "FullTexturePath: " << fullTexturePath << std::endl;
+				std::cout << "FullTexturePath: " << fullTexturePath << "(" << type << ")" << std::endl;
 			}
 
 			// テクスチャ配列に追加

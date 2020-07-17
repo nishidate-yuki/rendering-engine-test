@@ -17,6 +17,7 @@ public:
 	void SetMatrix(const char* name, const glm::mat4& matrix);
 	void SetVector(const char* name, const glm::vec3& vector);
 	void SetFloat(const char* name, float value);
+	void SetInt(const char* name, int value);
 	void SetDirectionalLight(const std::string name, const DirectionalLight dirLight);
 
 private:
