@@ -1,7 +1,6 @@
 #include "Mesh.h"
 #include "VertexArray.h"
 #include "Shader.h"
-#include "Texture.h"
 #include <vector>
 
 Mesh::Mesh(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices, const std::vector<Texture>& textures)

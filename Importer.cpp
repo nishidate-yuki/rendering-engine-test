@@ -66,7 +66,7 @@ void Importer::ProcessNode(Model* model, aiNode* node, const aiScene* scene, std
 	}
 }
 
-Mesh* Importer::ProcessMesh(aiMesh* mesh, const aiScene* scene, std::string directory)
+Mesh Importer::ProcessMesh(aiMesh* mesh, const aiScene* scene, std::string directory)
 {
 	std::vector<Vertex> vertices;
 	std::vector<unsigned int> indices;
@@ -122,7 +122,7 @@ Mesh* Importer::ProcessMesh(aiMesh* mesh, const aiScene* scene, std::string dire
 	textures = ProcessTextures(material, directory);
 	std::cout << "NumTextures: " << textures.size() << std::endl;
 
-	return new Mesh(vertices, indices, textures);
+	return Mesh(vertices, indices, textures);
 }
 
 std::vector<Texture> Importer::ProcessTextures(const aiMaterial* material, std::string directory)

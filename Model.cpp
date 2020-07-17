@@ -1,6 +1,5 @@
 #include "Model.h"
 #include "Shader.h"
-#include "Mesh.h"
 #include <iostream>
 #include <glm/gtc/matrix_transform.hpp> 
 #include <glm/gtx/transform.hpp>
@@ -20,8 +19,8 @@ void Model::Update(const float deltaTime)
 void Model::Draw(Shader* shader)
 {
 	shader->SetMatrix("uModel", modelMatrix);
-	for (auto mesh : meshes) {
-		mesh->Draw(shader);
+	for (auto &mesh : meshes) {
+		mesh.Draw(shader);
 	}
 }
 

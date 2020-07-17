@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 #include "glm/glm.hpp"
+#include "Texture.h"
 
 class VertexArray;
 class Shader;

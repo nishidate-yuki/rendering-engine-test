@@ -4,8 +4,7 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <vector>
 #include <unordered_map>
-
-class Mesh;
+#include "Mesh.h"
 class Shader;
 
 class Model
@@ -16,7 +15,7 @@ public:
 	void Update(const float deltaTime);
 	void Draw(Shader* shader);
 
-	std::vector<Mesh*> meshes;
+	std::vector<Mesh> meshes;
 
 	void SetScale(const glm::vec3& scale);
 

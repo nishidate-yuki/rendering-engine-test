@@ -21,6 +21,6 @@ public:
 
 	static Model* ImportModel(std::string path);
 	static void ProcessNode(Model* model, aiNode* node, const aiScene* scene, std::string directory);
-	static Mesh* ProcessMesh(aiMesh* mesh, const aiScene* scene, std::string directory);
+	static Mesh ProcessMesh(aiMesh* mesh, const aiScene* scene, std::string directory);
 	static std::vector<Texture> ProcessTextures(const aiMaterial* material, std::string directory);
 };
