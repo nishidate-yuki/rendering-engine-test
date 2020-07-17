@@ -9,17 +9,15 @@ class Shader;
 
 class Model
 {
+	friend class Importer;	// Make meshes accessible
 public:
 	Model();
 	~Model();
 
 	void Update(const float deltaTime);
 	void Draw(Shader* shader);
-
-	std::vector<Mesh*> meshes;
-
 	void SetScale(const glm::vec3& scale);
-
 private:
+	std::vector<Mesh*> meshes;
 	glm::mat4 modelMatrix;
 };
