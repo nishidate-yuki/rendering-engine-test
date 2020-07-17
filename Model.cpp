@@ -10,6 +10,13 @@ Model::Model()
 {
 }
 
+Model::~Model()
+{
+	while (!meshes.empty()) {
+		delete meshes.back();
+	}
+}
+
 void Model::Update(const float deltaTime)
 {
 	//glm::mat4 rotateMatrix = glm::rotate(deltaTime, glm::vec3(0, 1, 0));

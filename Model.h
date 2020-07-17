@@ -11,6 +11,7 @@ class Model
 {
 public:
 	Model();
+	~Model();
 
 	void Update(const float deltaTime);
 	void Draw(Shader* shader);
