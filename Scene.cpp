@@ -14,6 +14,12 @@ Scene::Scene(Engine* engine)
 
 Scene::~Scene()
 {
+	while (!models.empty()) {
+		delete models.back();
+	}
+	meshShader->Unload();
+	delete meshShader;
+	delete camera;
 }
 
 bool Scene::Initialize(const float screenWidth, const float screenHeight)
