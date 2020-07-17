@@ -16,6 +16,9 @@ Engine::Engine()
 
 Engine::~Engine()
 {
+	delete windowManager;
+	delete renderer;
+	delete inputManager;
 }
 
 bool Engine::Initialize()
