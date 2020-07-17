@@ -19,12 +19,12 @@ out vec4 outColor;
 uniform sampler2D uTexture;
 
 // Light
-uniform DirectionalLight dirLight;
+uniform DirectionalLight uDirLight;
 
 void main()
 {
 	vec3 N = normalize(fragNormal);
-	vec3 L = - normalize(dirLight.direction);
+	vec3 L = - normalize(uDirLight.direction);
 
 	vec3 Diffuse = vec3(dot(N, L));
 

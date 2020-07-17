@@ -1,6 +1,7 @@
 #include "Shader.h"
 #include <fstream>
 #include <sstream>
+#include <string>
 #include <SDL2/SDL.h>
 #include <glm/gtc/type_ptr.hpp>
 
@@ -75,12 +76,11 @@ void Shader::SetFloat(const char* name, float value)
 	glUniform1f(loc, value);
 }
 
-void Shader::SetDirectionalLight(const char* name, const DirectionalLight dirLight)
+void Shader::SetDirectionalLight(const std::string name, const DirectionalLight dirLight)
 {
-	// TODO: ディレクショナルライトも複数必要であればnameを使って動的に送る
-	SetVector("dirLight.color", dirLight.color);
-	SetFloat("dirLight.intensity", dirLight.intensity);
-	SetVector("dirLight.direction", dirLight.direction);
+	SetVector((name + ".color").c_str(), dirLight.color);
+	SetFloat((name + ".intensity").c_str(), dirLight.intensity);
+	SetVector((name + ".direction").c_str(), dirLight.direction);
 }
 
 

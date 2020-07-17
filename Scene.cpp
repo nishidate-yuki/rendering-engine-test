@@ -34,8 +34,8 @@ bool Scene::Initialize(float screenWidth, float screenHeight)
 void Scene::Draw()
 {
 	meshShader->SetActive();
-	meshShader->SetMatrix("uViewProj", camera->GetViewProjection());	// Camera
-	meshShader->SetDirectionalLight(nullptr, dirLight);	// Light
+	meshShader->SetMatrix("uViewProj", camera->GetViewProjection());
+	meshShader->SetDirectionalLight("uDirLight", dirLight);
 
 	for (auto model : models) {
 		model->Draw(meshShader);

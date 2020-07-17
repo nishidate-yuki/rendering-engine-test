@@ -17,7 +17,7 @@ public:
 	void SetMatrix(const char* name, const glm::mat4& matrix);
 	void SetVector(const char* name, const glm::vec3& vector);
 	void SetFloat(const char* name, float value);
-	void SetDirectionalLight(const char* name, const DirectionalLight dirLight);
+	void SetDirectionalLight(const std::string name, const DirectionalLight dirLight);
 
 private:
 	bool CompileShader(const std::string& fileName,
