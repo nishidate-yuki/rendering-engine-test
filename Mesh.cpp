@@ -9,6 +9,11 @@ Mesh::Mesh(const std::vector<Vertex>& vertices, const std::vector<unsigned int>&
 	this->textures = textures;
 }
 
+Mesh::~Mesh()
+{
+	delete(vertexArray);
+}
+
 void Mesh::Draw(Shader* shader)
 {
 	vertexArray->SetActive();
