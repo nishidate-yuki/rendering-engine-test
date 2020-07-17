@@ -44,7 +44,7 @@ VertexArray::~VertexArray()
 	glDeleteVertexArrays(1, &vertexArray);
 }
 
-void VertexArray::SetActive()
+void VertexArray::SetActive() const
 {
 	glBindVertexArray(vertexArray);
 }

@@ -53,7 +53,7 @@ void Texture::Unload()
 	glDeleteTextures(1, &textureID);
 }
 
-void Texture::SetActive()
+void Texture::SetActive() const
 {
 	glBindTexture(GL_TEXTURE_2D, textureID);
 }

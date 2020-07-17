@@ -13,20 +13,19 @@ class Scene
 public:
 	Scene(Engine* engine);
 	~Scene();
-	bool Initialize(float screenWidth, float screenHeight);
+	bool Initialize(const float screenWidth, const float screenHeight);
 	void Draw();
-	void Update(float deltaTime);
+	void Update(const float deltaTime);
 
 	bool LoadContent();
 	bool LoadShaders();
 
-	auto GetCamera() { return camera; }
+	auto GetCamera() const { return camera; }
 
 private:
 	Engine* engine;
 	std::vector<Model*> models;
 	Shader* meshShader;
-	Shader* normalShader;
 	Camera* camera;
 	DirectionalLight dirLight;
 	PointLight pointLight;

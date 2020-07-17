@@ -14,8 +14,8 @@ public:
 	void Shutdown();
 	void UnloadData();
 	void SwapWindow();
-	float GetScreenWidth() { return screenWidth; }
-	float GetScreenHeight() { return screenHeight; }
+	auto GetScreenWidth() const { return screenWidth; }
+	auto GetScreenHeight() const { return screenHeight; }
 private:
 	SDL_Window* window;
 	SDL_GLContext context;

@@ -41,7 +41,6 @@ bool Shader::Load(const std::string& vertName, const std::string& fragName)
 
 void Shader::Unload()
 {
-	// Delete the program/shaders
 	glDeleteProgram(shaderProgram);
 	glDeleteShader(vertexShader);
 	glDeleteShader(fragShader);
@@ -49,23 +48,19 @@ void Shader::Unload()
 
 void Shader::SetActive() const
 {
-	// Set this program as the active one
 	glUseProgram(shaderProgram);
 }
 
 void Shader::SetMatrix(const char* name, const glm::mat4& matrix)
 {
-	// Find the uniform by this name
 	GLuint loc = glGetUniformLocation(shaderProgram, name);
-	// Send the matrix data to the uniform
-	// 第3引数: 行ベクトルを使うならTRUE
 	glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(matrix));
+	// 第3引数: 行ベクトルを使うならTRUE
 }
 
 void Shader::SetVector(const char* name, const glm::vec3& vector)
 {
 	GLuint loc = glGetUniformLocation(shaderProgram, name);
-	// Send the vector data
 	glUniform3fv(loc, 1, glm::value_ptr(vector));
 }
 

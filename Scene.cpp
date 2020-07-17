@@ -1,8 +1,8 @@
 #include "Scene.h"
-#include "Model.h"
 #include <iostream>
-#include "Importer.h"
+#include "Model.h"
 #include "Camera.h"
+#include "Importer.h"
 #include "WindowManager.h"
 
 Scene::Scene(Engine* engine)
@@ -16,7 +16,7 @@ Scene::~Scene()
 {
 }
 
-bool Scene::Initialize(float screenWidth, float screenHeight)
+bool Scene::Initialize(const float screenWidth, const float screenHeight)
 {
 	camera = new Camera(screenWidth, screenHeight);
 
@@ -42,7 +42,7 @@ void Scene::Draw()
 	}
 }
 
-void Scene::Update(float deltaTime)
+void Scene::Update(const float deltaTime)
 {
 	for (auto model : models) {
 		model->Update(deltaTime);
@@ -52,10 +52,8 @@ void Scene::Update(float deltaTime)
 
 bool Scene::LoadContent()
 {
-	//Model* model = Importer::ImportModel("Assets/bunny.fbx");
 	Model* model = Importer::ImportModel("Assets/DamagedHelmet/glTF/DamagedHelmet.gltf");
 	models.push_back(model);
-
 	return true;
 }
 

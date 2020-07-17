@@ -9,7 +9,7 @@ public:
 	bool Load(const std::string& filePath);
 	void Unload();
 
-	void SetActive();
+	void SetActive() const;
 
 	int GetWidth() const { return width; }
 	int GetHeight() const { return height; }
