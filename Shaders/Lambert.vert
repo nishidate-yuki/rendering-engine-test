@@ -5,9 +5,11 @@ uniform mat4 uModel;
 uniform mat4 uViewProj;
 
 // position, normal, tex coords.
-layout(location = 0) in vec3 inPosition;
-layout(location = 1) in vec3 inNormal;
+layout(location = 0) in vec3 inPosition;	// model space
+layout(location = 1) in vec3 inNormal;		// model space
 layout(location = 2) in vec2 inTexCoord;
+layout(location = 3) in vec3 inTangent;		// model space ?
+layout(location = 4) in vec3 inBiTangent;	// model space ?
 
 // positionà»äOÇÃèoóÕ
 out vec2 fragTexCoord;

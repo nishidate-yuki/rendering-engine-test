@@ -2,6 +2,7 @@
 #include "Model.h"
 #include "Texture.h"
 #include <iostream>
+#include <glm/gtx/string_cast.hpp>
 
 bool Importer::CheckFileValidity(const std::string& filePath)
 {

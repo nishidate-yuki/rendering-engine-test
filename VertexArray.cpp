@@ -35,6 +35,14 @@ VertexArray::VertexArray(const Vertex* verts, unsigned int numVerts, const unsig
 	glEnableVertexAttribArray(2);
 	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex),
 		reinterpret_cast<void*>(offsetof(Vertex, texCoords)));
+	// Tangent
+	glEnableVertexAttribArray(3);
+	glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex),
+		reinterpret_cast<void*>(offsetof(Vertex, tangent)));
+	// BiTangent
+	glEnableVertexAttribArray(4);
+	glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex),
+		reinterpret_cast<void*>(offsetof(Vertex, biTangent)));
 }
 
 VertexArray::~VertexArray()

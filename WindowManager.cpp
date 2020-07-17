@@ -46,10 +46,7 @@ bool WindowManager::Initialize(float screenWidth, float screenHeight)
 		SDL_Log("Failed to initialize GLEW.");
 		return false;
 	}
-
-	// On some platforms, GLEW will emit a benign error code,
-	// so clear it
-	glGetError();
+	glGetError();	// Clear error
 
 	return true;
 }
