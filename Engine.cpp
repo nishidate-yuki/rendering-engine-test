@@ -4,11 +4,11 @@
 #include "Renderer.h"
 #include "WindowManager.h"
 #include "InputManager.h"
-#include "Scene.h"
 
 Engine::Engine()
 	: renderer(nullptr)
 	, isRunning(true)
+	, scene(this)
 {
 }
 
@@ -33,17 +33,16 @@ bool Engine::Initialize()
 		return false;
 	}
 
-	//Create scene
-	scene = new Scene(this);
-	scene->Initialize(screenWidth, screenHeight);
+	// Initialize scene
+	scene.Initialize(screenWidth, screenHeight);
 
 	// Create renderer
 	renderer = new Renderer(this);
-	renderer->Initialize(windowManager, scene);
+	renderer->Initialize(windowManager, &scene);
 
 	// Create InputManager
 	inputManager = new InputManager(this);
-	inputManager->Initialize(scene);
+	inputManager->Initialize(&scene);
 
 	ticksCount = SDL_GetTicks();
 
@@ -80,7 +79,7 @@ void Engine::Update()
 	}
 	ticksCount = SDL_GetTicks();
 
-	scene->Update(deltaTime);
+	scene.Update(deltaTime);
 }
 
 void Engine::Render()
