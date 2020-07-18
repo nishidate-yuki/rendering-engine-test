@@ -1,4 +1,4 @@
-#version 330
+#version 430
 
 // structs
 struct DirectionalLight
@@ -26,9 +26,11 @@ uniform DirectionalLight uDirLight;
 
 void main()
 {
-	vec3 N = normalize(fragNormal);
-	vec3 L = - normalize(uDirLight.direction);
+	vec3 normal = normalize(2.0 * texture(uNormalMap, fragTexCoord).rgb - 1.0);
+    normal = normalize(TBN * normal); 
 
+	vec3 N = normalize(normal);
+	vec3 L = - normalize(uDirLight.direction);
 	vec3 Diffuse = vec3(dot(N, L));
 
 	// Sample color from texture
