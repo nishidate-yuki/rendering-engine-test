@@ -47,7 +47,23 @@ VertexArray::VertexArray(const Vertex* verts, unsigned int numVerts, const unsig
 }
 
 VertexArray::VertexArray(const float* verts, unsigned int numVerts)
+	: numVerts(numVerts)
+	, useIndex(false)
 {
+	// Create vertex array
+	glGenVertexArrays(1, &vertexArray);
+	glBindVertexArray(vertexArray);
+
+	// Create vertex buffer
+	glGenBuffers(1, &vertexBuffer);
+	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
+	glBufferData(GL_ARRAY_BUFFER, numVerts * sizeof(float), verts, GL_STATIC_DRAW);
+
+	// Specify the vertex attributes
+	// (For now, assume one vertex format)
+	// Position is 3 floats
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float), 0);
 }
 
 VertexArray::~VertexArray()
@@ -59,12 +75,12 @@ VertexArray::~VertexArray()
 
 void VertexArray::Draw()
 {
+	SetActive();
 	if (useIndex) {
 		glDrawElements(GL_TRIANGLES,
 			numIndices, GL_UNSIGNED_INT, nullptr);
 	} else {
-		glDrawArrays(GL_TRIANGLES,
-			0, numVerts);
+		glDrawArrays(GL_TRIANGLES, 0, numVerts);
 	}
 }
 

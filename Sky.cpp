@@ -2,8 +2,9 @@
 #include <stb_image.h>
 #include <algorithm>
 #include <GL/glew.h>
-#include "Mesh.h"
+#include "VertexArray.h"
 #include "Importer.h"
+#include "Shader.h"
 
 Sky::Sky()
 {
@@ -41,30 +42,62 @@ bool Sky::LoadHDRI(const std::string& filePath)
 	return true;
 }
 
+void Sky::CreateBox()
+{
+	float skyboxVertices[] = {
+		// positions
+		-1.0f,  1.0f, -1.0f,
+		-1.0f, -1.0f, -1.0f,
+		 1.0f, -1.0f, -1.0f,
+		 1.0f, -1.0f, -1.0f,
+		 1.0f,  1.0f, -1.0f,
+		-1.0f,  1.0f, -1.0f,
+
+		-1.0f, -1.0f,  1.0f,
+		-1.0f, -1.0f, -1.0f,
+		-1.0f,  1.0f, -1.0f,
+		-1.0f,  1.0f, -1.0f,
+		-1.0f,  1.0f,  1.0f,
+		-1.0f, -1.0f,  1.0f,
+
+		 1.0f, -1.0f, -1.0f,
+		 1.0f, -1.0f,  1.0f,
+		 1.0f,  1.0f,  1.0f,
+		 1.0f,  1.0f,  1.0f,
+		 1.0f,  1.0f, -1.0f,
+		 1.0f, -1.0f, -1.0f,
+
+		-1.0f, -1.0f,  1.0f,
+		-1.0f,  1.0f,  1.0f,
+		 1.0f,  1.0f,  1.0f,
+		 1.0f,  1.0f,  1.0f,
+		 1.0f, -1.0f,  1.0f,
+		-1.0f, -1.0f,  1.0f,
+
+		-1.0f,  1.0f, -1.0f,
+		 1.0f,  1.0f, -1.0f,
+		 1.0f,  1.0f,  1.0f,
+		 1.0f,  1.0f,  1.0f,
+		-1.0f,  1.0f,  1.0f,
+		-1.0f,  1.0f, -1.0f,
+
+		-1.0f, -1.0f, -1.0f,
+		-1.0f, -1.0f,  1.0f,
+		 1.0f, -1.0f, -1.0f,
+		 1.0f, -1.0f, -1.0f,
+		-1.0f, -1.0f,  1.0f,
+		 1.0f, -1.0f,  1.0f
+	};
+
+	vertexArray = new VertexArray(skyboxVertices, 36);
+}
+
 void Sky::SetActive() const
 {
 }
 
-Mesh* Sky::CreateCube()
+void Sky::Draw(Shader* shader)
 {
-	std::vector<Vertex> vertices;
-	std::vector<unsigned int> indices;
-
-	Vertex vertex;
-
-	vertex.position  = { -1, -1, 1 };
-	vertex.normal    = { 0, 0, 1 };
-	vertex.texCoords = { 0, 0 };
-	vertices.push_back(vertex);
-
-	vertex.position = { -1, 1, 1 };
-	vertex.normal = { 1, 0, 0 };
-	vertex.texCoords = { 0, 0 };
-	vertices.push_back(vertex);
-
-
-	// Index
-	//indices.push_back(face.mIndices[j]);
-
-	return nullptr;
+	vertexArray->Draw();
 }
+
