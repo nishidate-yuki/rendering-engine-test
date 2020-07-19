@@ -5,7 +5,10 @@ class VertexArray
 public:
 	VertexArray(const Vertex* verts, unsigned int numVerts,
 		const unsigned int* indices, unsigned int numIndices);
+	VertexArray(const float* verts, unsigned int numVerts);
 	~VertexArray();
+
+	void Draw();
 
 	void SetActive() const;
 	auto GetNumIndices() const { return numIndices; }
@@ -16,5 +19,6 @@ private:
 	unsigned int vertexBuffer;
 	unsigned int indexBuffer;
 	unsigned int vertexArray;
+	bool useIndex;
 };
 

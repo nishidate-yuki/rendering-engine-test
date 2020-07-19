@@ -2,6 +2,8 @@
 #include <stb_image.h>
 #include <algorithm>
 #include <GL/glew.h>
+#include "Mesh.h"
+#include "Importer.h"
 
 Sky::Sky()
 {
@@ -11,7 +13,7 @@ Sky::~Sky()
 {
 }
 
-bool Sky::Load(const std::string& filePath)
+bool Sky::LoadHDRI(const std::string& filePath)
 {
 	std::string path = filePath;
 	std::replace(path.begin(), path.end(), '\\', '/');
@@ -41,4 +43,28 @@ bool Sky::Load(const std::string& filePath)
 
 void Sky::SetActive() const
 {
+}
+
+Mesh* Sky::CreateCube()
+{
+	std::vector<Vertex> vertices;
+	std::vector<unsigned int> indices;
+
+	Vertex vertex;
+
+	vertex.position  = { -1, -1, 1 };
+	vertex.normal    = { 0, 0, 1 };
+	vertex.texCoords = { 0, 0 };
+	vertices.push_back(vertex);
+
+	vertex.position = { -1, 1, 1 };
+	vertex.normal = { 1, 0, 0 };
+	vertex.texCoords = { 0, 0 };
+	vertices.push_back(vertex);
+
+
+	// Index
+	//indices.push_back(face.mIndices[j]);
+
+	return nullptr;
 }

@@ -23,6 +23,7 @@ public:
 	Mesh(const std::vector<Vertex>& vertices,
 		const std::vector<unsigned int>& indices,
 		const std::vector<Texture>& textures);
+	Mesh(const float* vertices);
 	~Mesh();
 
 	void Draw(Shader* shader);

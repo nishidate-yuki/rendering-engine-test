@@ -9,6 +9,10 @@ Mesh::Mesh(const std::vector<Vertex>& vertices, const std::vector<unsigned int>&
 	this->textures = textures;
 }
 
+Mesh::Mesh(const float* vertices)
+{
+}
+
 Mesh::~Mesh()
 {
 	delete(vertexArray);
@@ -39,7 +43,5 @@ void Mesh::Draw(Shader* shader)
 		shader->SetInt("uNormalMap", 2);
 	}
 
-	glDrawElements(GL_TRIANGLES,
-		vertexArray->GetNumIndices(),
-		GL_UNSIGNED_INT, nullptr);
+	vertexArray->Draw();
 }

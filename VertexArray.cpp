@@ -6,6 +6,7 @@
 VertexArray::VertexArray(const Vertex* verts, unsigned int numVerts, const unsigned int* indices, unsigned int numIndices)
 	: numVerts(numVerts)
 	, numIndices(numIndices)
+	, useIndex(true)
 {
 	// Create vertex array
 	glGenVertexArrays(1, &vertexArray);
@@ -45,11 +46,26 @@ VertexArray::VertexArray(const Vertex* verts, unsigned int numVerts, const unsig
 		reinterpret_cast<void*>(offsetof(Vertex, biTangent)));
 }
 
+VertexArray::VertexArray(const float* verts, unsigned int numVerts)
+{
+}
+
 VertexArray::~VertexArray()
 {
 	glDeleteBuffers(1, &vertexBuffer);
 	glDeleteBuffers(1, &indexBuffer);
 	glDeleteVertexArrays(1, &vertexArray);
+}
+
+void VertexArray::Draw()
+{
+	if (useIndex) {
+		glDrawElements(GL_TRIANGLES,
+			numIndices, GL_UNSIGNED_INT, nullptr);
+	} else {
+		glDrawArrays(GL_TRIANGLES,
+			0, numVerts);
+	}
 }
 
 void VertexArray::SetActive() const
