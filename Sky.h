@@ -8,6 +8,7 @@ public:
 	Sky();
 	~Sky();
 
+	void Initialize(const std::string& filePath);
 	bool LoadHDRI(const std::string& filePath);
 	void CreateBox();
 

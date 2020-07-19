@@ -20,6 +20,8 @@ Mesh::~Mesh()
 
 void Mesh::Draw(Shader* shader)
 {
+	//textures[0].SetActive();
+
 	if (textures.size() >= 1) {
 		// Diffuse
 		glActiveTexture(GL_TEXTURE0);

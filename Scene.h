@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include "Light.h"
+#include "Sky.h"
 
 class Model;
 class Mesh;
@@ -24,8 +25,13 @@ public:
 
 private:
 	Engine* engine;
+
 	std::vector<Model*> models;
+	Sky sky;
+
 	Shader* meshShader;
+	Shader* skyShader;
+
 	Camera* camera;
 	DirectionalLight dirLight;
 	PointLight pointLight;

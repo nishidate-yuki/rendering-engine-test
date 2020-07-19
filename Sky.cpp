@@ -14,10 +14,18 @@ Sky::~Sky()
 {
 }
 
+void Sky::Initialize(const std::string& filePath)
+{
+	CreateBox();
+	LoadHDRI(filePath);
+}
+
 bool Sky::LoadHDRI(const std::string& filePath)
 {
 	std::string path = filePath;
 	std::replace(path.begin(), path.end(), '\\', '/');
+
+	stbi_set_flip_vertically_on_load(true);
 
 	// Load
 	float* data = stbi_loadf(path.c_str(), &width, &height, &channels, 0);
@@ -94,10 +102,16 @@ void Sky::CreateBox()
 
 void Sky::SetActive() const
 {
+	glBindTexture(GL_TEXTURE_2D, textureID);
 }
 
 void Sky::Draw(Shader* shader)
 {
+	//SetActive();
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, textureID);
+	shader->SetInt("skybox", 0);
+
 	vertexArray->Draw();
 }
 

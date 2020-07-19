@@ -9,7 +9,6 @@ Scene::Scene(Engine* engine)
 	: meshShader(nullptr)
 	, engine(engine)
 {
-
 }
 
 Scene::~Scene()
@@ -39,6 +38,7 @@ bool Scene::Initialize(const float screenWidth, const float screenHeight)
 
 void Scene::Draw()
 {
+	// Meshes
 	meshShader->SetActive();
 	meshShader->SetMatrix("uViewProj", camera->GetViewProjection());
 	meshShader->SetDirectionalLight("uDirLight", dirLight);
@@ -46,6 +46,11 @@ void Scene::Draw()
 	for (auto model : models) {
 		model->Draw(meshShader);
 	}
+
+	// Skybox
+	skyShader->SetActive();
+	skyShader->SetMatrix("uViewProj", camera->GetViewProjection());
+	sky.Draw(skyShader);
 }
 
 void Scene::Update(const float deltaTime)
@@ -60,6 +65,8 @@ bool Scene::LoadContent()
 {
 	Model* model = Importer::ImportModel("Assets/DamagedHelmet/glTF/DamagedHelmet.gltf");
 	models.push_back(model);
+
+	sky.Initialize("Assets/palermo_park_4k.hdr");
 	return true;
 }
 
@@ -68,6 +75,11 @@ bool Scene::LoadShaders()
 	meshShader = new Shader();
 	// Normal, BasicMesh, Lambert, NormalMapping
 	if (!meshShader->Load("Shaders/NormalMapping.vert", "Shaders/NormalMapping.frag")) {
+		return false;
+	}
+
+	skyShader = new Shader();
+	if (!skyShader->Load("Shaders/SkyShader.vert", "Shaders/SkyShader.frag")) {
 		return false;
 	}
 	return true;
