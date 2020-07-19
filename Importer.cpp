@@ -7,7 +7,7 @@
 bool Importer::CheckFileValidity(const std::string& filePath)
 {
 	struct stat info;
-	// file is blocking access or read 
+	// file is blocking access or read
 	if (stat(filePath.c_str(), &info) != 0) {
 		printf("Cannot access %s\n", filePath.c_str());
 		return false;
@@ -38,8 +38,8 @@ Model* Importer::ImportModel(std::string path)
 	auto model = new Model();
 
 	Assimp::Importer importer;
-	const aiScene* scene = importer.ReadFile(path, 
-		aiProcess_Triangulate | aiProcess_OptimizeMeshes 
+	const aiScene* scene = importer.ReadFile(path,
+		aiProcess_Triangulate | aiProcess_OptimizeMeshes
 		| aiProcess_CalcTangentSpace | aiProcess_FlipUVs);
 
 	auto directory = path.substr(0, path.find_last_of('/'));

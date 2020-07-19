@@ -20,6 +20,8 @@ out vec4 outColor;
 uniform sampler2D uDiffuse;
 uniform sampler2D uNormalMap;
 uniform sampler2D uEmissiveMap;
+uniform sampler2D uAOMap;
+uniform sampler2D uMetalRoughMap;
 
 // Light
 uniform DirectionalLight uDirLight;

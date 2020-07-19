@@ -18,22 +18,28 @@ void Mesh::Draw(Shader* shader)
 {
 	vertexArray->SetActive();
 
-	// Diffuse
-	glActiveTexture(GL_TEXTURE0);
-	textures[0].SetActive();
-	shader->SetInt("uDiffuse", 0);
+	if (textures.size() >= 1) {
+		// Diffuse
+		glActiveTexture(GL_TEXTURE0);
+		textures[0].SetActive();
+		shader->SetInt("uDiffuse", 0);
+	}
 
-	// Emissive
-	glActiveTexture(GL_TEXTURE1);
-	textures[1].SetActive();
-	shader->SetInt("uEmissiveMap", 1);
+	if (textures.size() >= 2) {
+		// Emissive
+		glActiveTexture(GL_TEXTURE1);
+		textures[1].SetActive();
+		shader->SetInt("uEmissiveMap", 1);
+	}
 
-	// Normal
-	glActiveTexture(GL_TEXTURE2);
-	textures[2].SetActive();
-	shader->SetInt("uNormalMap", 2);
+	if (textures.size() >= 3) {
+		// Normal
+		glActiveTexture(GL_TEXTURE2);
+		textures[2].SetActive();
+		shader->SetInt("uNormalMap", 2);
+	}
 
 	glDrawElements(GL_TRIANGLES,
-		vertexArray->GetNumIndices(), 
+		vertexArray->GetNumIndices(),
 		GL_UNSIGNED_INT, nullptr);
 }

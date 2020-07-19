@@ -9,7 +9,7 @@ Scene::Scene(Engine* engine)
 	: meshShader(nullptr)
 	, engine(engine)
 {
-	
+
 }
 
 Scene::~Scene()
@@ -58,7 +58,8 @@ void Scene::Update(const float deltaTime)
 
 bool Scene::LoadContent()
 {
-	Model* model = Importer::ImportModel("Assets/DamagedHelmet/glTF/DamagedHelmet.gltf");
+	//Model* model = Importer::ImportModel("Assets/DamagedHelmet/glTF/DamagedHelmet.gltf");
+	Model* model = Importer::ImportModel("Assets/Cube.fbx");
 	models.push_back(model);
 	return true;
 }
