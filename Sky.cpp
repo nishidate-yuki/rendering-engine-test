@@ -33,6 +33,7 @@ bool Sky::Initialize(const std::string& filePath, Engine* engine)
 		return false;
 	}
 
+	glViewport(0, 0, 512, 512);
 	CreateCubemap();
 	engine->ResetViewport();
 
@@ -70,10 +71,12 @@ bool Sky::LoadHDRI(const std::string& filePath)
 
 void Sky::Draw(glm::mat4 view, glm::mat4 projection)
 {
+	// Set matrix
 	skyShader->SetActive();
 	skyShader->SetMatrix("view", view);
 	skyShader->SetMatrix("projection", projection);
 
+	// Set cubemap
 	skyShader->SetInt("environmentMap", 0);
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, envCubemap);
@@ -122,17 +125,13 @@ void Sky::CreateCubemap()
 	   glm::lookAt(glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f,  0.0f, -1.0f), glm::vec3(0.0f, -1.0f,  0.0f))
 	};
 
-	// convert HDR equirectangular environment map to cubemap equivalent
+	// Setup shader
 	toCubemapShader->SetActive();
-	toCubemapShader->SetInt("hdri", 0);
-
-	// キャプチャ専用のV/P行列が必要
-	// TODO: 順番変える
 	toCubemapShader->SetMatrix("projection", captureProjection);
+	toCubemapShader->SetInt("hdri", 0);
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, hdrTexture);
 
-	glViewport(0, 0, 512, 512); // don't forget to configure the viewport to the capture dimensions.
 	glBindFramebuffer(GL_FRAMEBUFFER, captureFBO);
 	for (unsigned int i = 0; i < 6; ++i) {
 		// Set View
@@ -146,15 +145,9 @@ void Sky::CreateCubemap()
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		// ここでレンダリングした画像をテクスチャに保存しておく
-		RenderCube(); // renders a 1x1 cube
+		RenderCube(); // render 1x1 cube
 	}
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);	// バインド解除
-
-	//// TODO: リファクタ
-	//float screenWidth = 1024.0f;
-	//float screenHeight = 768.0f;
-	//glViewport(0, 0, screenWidth, screenHeight); // don't forget to configure the viewport to the capture dimensions.
-
 }
 
 void Sky::RenderCube()
