@@ -49,7 +49,7 @@ void Scene::Draw()
 {
 	// Update shader
 	meshShader->SetActive();
-	meshShader->SetMatrix("uViewProj", camera->GetViewProjection());
+	meshShader->SetMatrix("viewProj", camera->GetViewProjection());
 	meshShader->SetDirectionalLight("uDirLight", dirLight);
 
 	// Draw models

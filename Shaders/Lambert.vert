@@ -1,8 +1,8 @@
 #version 330
 
 // world transform / view-proj
-uniform mat4 uModel;
-uniform mat4 uViewProj;
+uniform mat4 model;
+uniform mat4 viewProj;
 
 // position, normal, tex coords.
 layout(location = 0) in vec3 inPosition;	// model space
@@ -17,13 +17,13 @@ out vec3 fragWorldPos;
 void main()
 {
 	vec4 pos = vec4(inPosition, 1.0);
-	pos = uModel * pos;
+	pos = model * pos;
 	fragWorldPos = pos.xyz;
-	gl_Position = uViewProj * pos;
+	gl_Position = viewProj * pos;
 
 	// w=0として平行移動を無効化する
 	// 非一様スケーリングを行う場合は法線行列をちゃんと計算する必要がある
-	fragNormal = (uModel * vec4(inNormal, 0.0f)).xyz;
+	fragNormal = (model * vec4(inNormal, 0.0f)).xyz;
 
 	fragTexCoord = inTexCoord;
 }
