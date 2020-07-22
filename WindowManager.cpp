@@ -48,6 +48,8 @@ bool WindowManager::Initialize(float screenWidth, float screenHeight)
 	}
 	glGetError();	// Clear error
 
+	glDepthFunc(GL_LEQUAL); // set depth function to less than AND equal for skybox depth trick.
+
 	return true;
 }
 

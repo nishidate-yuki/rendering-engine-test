@@ -57,7 +57,7 @@ VertexArray::VertexArray(const float* verts, unsigned int numVerts)
 	// Create vertex buffer
 	glGenBuffers(1, &vertexBuffer);
 	glBindBuffer(GL_ARRAY_BUFFER, vertexBuffer);
-	glBufferData(GL_ARRAY_BUFFER, numVerts * 3 * sizeof(float), verts, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, numVerts * sizeof(float) * 3, verts, GL_STATIC_DRAW);
 
 	// Specify the vertex attributes
 	// Position is 3 floats
@@ -68,7 +68,9 @@ VertexArray::VertexArray(const float* verts, unsigned int numVerts)
 VertexArray::~VertexArray()
 {
 	glDeleteBuffers(1, &vertexBuffer);
-	glDeleteBuffers(1, &indexBuffer);
+	if (useIndex) {
+		glDeleteBuffers(1, &indexBuffer);
+	}
 	glDeleteVertexArrays(1, &vertexArray);
 }
 

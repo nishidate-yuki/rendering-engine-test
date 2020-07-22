@@ -21,6 +21,15 @@ public:
 	bool LoadContent();
 	bool LoadShaders();
 
+	// TODO: Delete
+	//void SetupIBL();
+	//void RenderCube();
+	//unsigned int captureFBO;
+	//unsigned int captureRBO;
+	//unsigned int envCubemap;
+	//unsigned int cubeVAO = 0;
+	//unsigned int cubeVBO = 0;
+
 	auto GetCamera() const { return camera; }
 
 private:
@@ -30,7 +39,7 @@ private:
 	Sky sky;
 
 	Shader* meshShader;
-	Shader* skyShader;
+	//Shader* skyShader;
 
 	Camera* camera;
 	DirectionalLight dirLight;

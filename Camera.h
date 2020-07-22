@@ -13,6 +13,8 @@ public:
 	void Update();
 
 	auto GetViewProjection() const { return projection * view; }
+	auto GetProjection() const { return projection; }
+	auto GetView() const { return view; }
 
 private:
 	glm::vec3 position;
