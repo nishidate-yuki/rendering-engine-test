@@ -14,6 +14,7 @@ public:
 	void Shutdown();
 	void UnloadData();
 	void SwapWindow();
+	void ResetViewport();
 	auto GetScreenWidth() const { return screenWidth; }
 	auto GetScreenHeight() const { return screenHeight; }
 private:

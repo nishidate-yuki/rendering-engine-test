@@ -6,17 +6,7 @@
 #include "VertexArray.h"
 #include "Importer.h"
 #include "Shader.h"
-
-
-
-void checkGLError(std::string str)
-{
-	GLenum err;
-	while (err = glGetError()) {
-		auto errString = gluErrorString(err);
-		std::cout << str << ": " << err << errString << "\n";
-	}
-}
+#include "Engine.h"
 
 
 Sky::Sky()
@@ -27,7 +17,7 @@ Sky::~Sky()
 {
 }
 
-bool Sky::Initialize(const std::string& filePath)
+bool Sky::Initialize(const std::string& filePath, Engine* engine)
 {
 	if (!LoadHDRI(filePath)) {
 		return false;
@@ -44,6 +34,7 @@ bool Sky::Initialize(const std::string& filePath)
 	}
 
 	CreateCubemap();
+	engine->ResetViewport();
 
 	return true;
 }
@@ -53,9 +44,8 @@ bool Sky::LoadHDRI(const std::string& filePath)
 	std::string path = filePath;
 	std::replace(path.begin(), path.end(), '\\', '/');
 
-	stbi_set_flip_vertically_on_load(true);
-
 	// Load
+	stbi_set_flip_vertically_on_load(true);
 	float* data = stbi_loadf(path.c_str(), &width, &height, &channels, 0);
 	if (!data) {
 		printf("Texture failed to load at path: %s \n", path.c_str());
@@ -78,16 +68,11 @@ bool Sky::LoadHDRI(const std::string& filePath)
 	return true;
 }
 
-
-void Sky::SetActive() const
-{
-}
-
 void Sky::Draw(glm::mat4 view, glm::mat4 projection)
 {
 	skyShader->SetActive();
-	skyShader->SetMatrix("projection", projection);
 	skyShader->SetMatrix("view", view);
+	skyShader->SetMatrix("projection", projection);
 
 	skyShader->SetInt("environmentMap", 0);
 	glActiveTexture(GL_TEXTURE0);
@@ -99,10 +84,10 @@ void Sky::Draw(glm::mat4 view, glm::mat4 projection)
 void Sky::CreateCubemap()
 {
 	CreateCube();
-	// Create Frame/Render buffer
+
+	// Create Frame/Render buffer and bind
 	glGenFramebuffers(1, &captureFBO);
 	glGenRenderbuffers(1, &captureRBO);
-
 	glBindFramebuffer(GL_FRAMEBUFFER, captureFBO);
 	glBindRenderbuffer(GL_RENDERBUFFER, captureRBO);
 
@@ -115,8 +100,7 @@ void Sky::CreateCubemap()
 	glGenTextures(1, &envCubemap);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, envCubemap);
 	for (unsigned int i = 0; i < 6; ++i) {
-		// note that we store each face with 16 bit floating point values
-		// メモリ割り当てをするだけで、データは空にする
+		// メモリ割り当てをするだけで、データは空のまま
 		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, GL_RGB16F,
 			512, 512, 0, GL_RGB, GL_FLOAT, nullptr);
 	}
@@ -159,7 +143,6 @@ void Sky::CreateCubemap()
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
 			GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, envCubemap, 0);
 
-		//glClearColor(1, 0, 0, 1);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		// ここでレンダリングした画像をテクスチャに保存しておく
@@ -167,10 +150,11 @@ void Sky::CreateCubemap()
 	}
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);	// バインド解除
 
-	// TODO: リファクタ
-	float screenWidth = 1024.0f;
-	float screenHeight = 768.0f;
-	glViewport(0, 0, screenWidth, screenHeight); // don't forget to configure the viewport to the capture dimensions.
+	//// TODO: リファクタ
+	//float screenWidth = 1024.0f;
+	//float screenHeight = 768.0f;
+	//glViewport(0, 0, screenWidth, screenHeight); // don't forget to configure the viewport to the capture dimensions.
+
 }
 
 void Sky::RenderCube()

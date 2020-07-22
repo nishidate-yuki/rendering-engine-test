@@ -60,6 +60,11 @@ void Engine::Shutdown()
 {
 }
 
+void Engine::ResetViewport()
+{
+	windowManager->ResetViewport();
+}
+
 void Engine::ProcessInput()
 {
 	inputManager->ProcessInput();

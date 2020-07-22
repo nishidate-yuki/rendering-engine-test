@@ -16,6 +16,7 @@ public:
 	void Shutdown();
 
 	void Stop() { isRunning = false; }
+	void ResetViewport();
 
 private:
 	void ProcessInput();

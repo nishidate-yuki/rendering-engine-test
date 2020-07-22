@@ -65,3 +65,8 @@ void WindowManager::SwapWindow()
 {
 	SDL_GL_SwapWindow(window);
 }
+
+void WindowManager::ResetViewport()
+{
+	glViewport(0, 0, screenWidth, screenHeight); // don't forget to configure the viewport to the capture dimensions.
+}

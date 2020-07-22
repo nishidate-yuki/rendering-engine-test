@@ -21,28 +21,21 @@ public:
 	bool LoadContent();
 	bool LoadShaders();
 
-	// TODO: Delete
-	//void SetupIBL();
-	//void RenderCube();
-	//unsigned int captureFBO;
-	//unsigned int captureRBO;
-	//unsigned int envCubemap;
-	//unsigned int cubeVAO = 0;
-	//unsigned int cubeVBO = 0;
-
 	auto GetCamera() const { return camera; }
 
 private:
 	Engine* engine;
 
-	std::vector<Model*> models;
-	Sky sky;
-
+	// Shader
 	Shader* meshShader;
-	//Shader* skyShader;
 
+	// Environment
+	Sky sky;
 	Camera* camera;
 	DirectionalLight dirLight;
 	PointLight pointLight;
+
+	// Objects
+	std::vector<Model*> models;
 };
 
