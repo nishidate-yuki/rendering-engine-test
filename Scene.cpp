@@ -51,7 +51,7 @@ void Scene::Draw()
 	meshShader->SetActive();
 	meshShader->SetMatrix("viewProj", camera->GetViewProjection());
 	meshShader->SetDirectionalLight("uDirLight", dirLight);
-	meshShader->SetDirectionalLight("uDirLight", dirLight);
+	meshShader->SetVector("camPos", camera->GetPos());
 
 	// Set irradiance map
 	meshShader->SetInt("irradianceMap", 16);
@@ -80,8 +80,8 @@ bool Scene::LoadContent()
 	Model* model = Importer::ImportModel("Assets/DamagedHelmet/glTF/DamagedHelmet.gltf");
 	models.push_back(model);
 
-	//sky.Initialize("Assets/palermo_park_4k.hdr", engine);
-	sky.Initialize("Assets/the_sky_is_on_fire_4k.hdr", engine);
+	sky.Initialize("Assets/palermo_park_4k.hdr", engine);
+	//sky.Initialize("Assets/the_sky_is_on_fire_4k.hdr", engine);
 
 	return true;
 }
@@ -89,8 +89,8 @@ bool Scene::LoadContent()
 bool Scene::LoadShaders()
 {
 	meshShader = new Shader();
-	// Normal, BasicMesh, Lambert, NormalMapping, DiffuseIBL
-	if (!meshShader->Load("Shaders/DiffuseIBL.vert", "Shaders/DiffuseIBL.frag")) {
+	// Normal, BasicMesh, Lambert, NormalMapping, DiffuseIBL, PBR
+	if (!meshShader->Load("Shaders/PBR.vert", "Shaders/PBR.frag")) {
 		return false;
 	}
 	return true;

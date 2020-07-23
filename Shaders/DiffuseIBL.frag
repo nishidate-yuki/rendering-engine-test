@@ -1,4 +1,5 @@
 #version 330
+const float PI= 3.14159265359;
 
 struct DirectionalLight
 {
@@ -14,10 +15,15 @@ in vec3 fragWorldPos;
 out vec4 outColor;
 
 uniform samplerCube irradianceMap;
-uniform sampler2D uTexture;
+uniform sampler2D diffuseMap;
+uniform sampler2D normalMap;
+uniform sampler2D emissiveMap;
+uniform sampler2D AOMap;
+uniform sampler2D metalRoughMap;
 uniform DirectionalLight uDirLight;
 
-// Œ»ó‚ÍNormalMapping‚È‚µ‚É‚µ‚Ä‚¢‚é
+// Œ»ó‚ÍNormalMapping–³‚µ
+// ”½Ë‚ÌŒã‚ÉNormalMapping‚ğ‚µ‚½•û‚ªˆá‚¢‚ª•ª‚©‚è‚â‚·‚¢
 void main()
 {
 	vec3 N = normalize(fragNormal);
@@ -26,6 +32,6 @@ void main()
 
 	vec3 Diffuse = ambient;
 
-    outColor = texture(uTexture, fragTexCoord);
+    outColor = texture(diffuseMap, fragTexCoord);
 	outColor *= vec4(Diffuse, 1.0);
 }

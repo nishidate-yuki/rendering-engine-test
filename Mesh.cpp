@@ -20,25 +20,15 @@ Mesh::~Mesh()
 
 void Mesh::Draw(Shader* shader)
 {
-	if (textures.size() >= 1) {
-		// Diffuse
-		glActiveTexture(GL_TEXTURE0);
-		textures[0].SetActive();
-		shader->SetInt("diffuseMap", 0);
-	}
+	const char* maps[] = {
+		"albedoMap", "emissiveMap", "normalMap",
+		"emissiveMap", "AOMap", "metalRoughMap"
+	};
 
-	if (textures.size() >= 2) {
-		// Emissive
-		glActiveTexture(GL_TEXTURE1);
-		textures[1].SetActive();
-		shader->SetInt("emissiveMap", 1);
-	}
-
-	if (textures.size() >= 3) {
-		// Normal
-		glActiveTexture(GL_TEXTURE2);
-		textures[2].SetActive();
-		shader->SetInt("normalMap", 2);
+	for (int i = 0; i < textures.size(); i++) {
+		glActiveTexture(GL_TEXTURE0 + i);
+			textures[i].SetActive();
+			shader->SetInt(maps[i], i);
 	}
 
 	vertexArray->Draw();
