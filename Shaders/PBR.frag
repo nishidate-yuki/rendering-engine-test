@@ -57,30 +57,44 @@ in mat3 TBN;
 out vec4 outColor;
 
 uniform vec3 camPos;
+uniform samplerCube envCubemap;
 uniform samplerCube irradianceMap;
+
 uniform sampler2D albedoMap;
 uniform sampler2D emissiveMap;
 uniform sampler2D normalMap;
 uniform sampler2D AOMap;
 uniform sampler2D metalRoughMap;
+
 uniform DirectionalLight uDirLight;
 
 // åªèÛÇÕNormalMappingñ≥Çµ
 // îΩéÀÇÃå„Ç…NormalMappingÇÇµÇΩï˚Ç™à·Ç¢Ç™ï™Ç©ÇËÇ‚Ç∑Ç¢
 void main()
 {
-	vec3 normal = normalize(2.0 * texture(normalMap, fragTexCoord).rgb - 1.0);
+    vec4 albedo     =  texture(albedoMap, fragTexCoord).rgba;
+    vec3 emissive   =  texture(emissiveMap, fragTexCoord).rgb;
+    float ao        =  texture(AOMap, fragTexCoord).r;
+    vec2 metalRough =  texture(metalRoughMap, fragTexCoord).bg;
+    float metallic  =  metalRough.x;
+    float roughness =  metalRough.y;
+
+    vec3 normal   =  texture(normalMap, fragTexCoord).rgb;
+	normal = normalize(2.0 * normal.rgb - 1.0);
     normal = normalize(TBN * normal);
 	vec3 N = normalize(normal);
 //	vec3 N = normalize(fragNormal);
 
+//	vec3 F0 = vec3(0.04);
+//  F0 = mix(F0, albedo.rgb, metallic);
+//
 	vec3 V = normalize(camPos - fragWorldPos);
     vec3 R = reflect(-V, N);
 
 	vec3 ambient = texture(irradianceMap, N).rgb;
-
 	vec3 Diffuse = ambient;
+//	outColor = albedo * vec4(Diffuse, 1.0);
 
-    outColor = texture(albedoMap, fragTexCoord);
-	outColor *= vec4(Diffuse, 1.0);
+	vec3 environment = texture(envCubemap, R).rgb;
+	outColor = albedo * vec4(Diffuse, 1.0) + vec4(environment, 1.0) * metallic;
 }

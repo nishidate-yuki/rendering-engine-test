@@ -58,6 +58,11 @@ void Scene::Draw()
 	glActiveTexture(GL_TEXTURE16);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, sky.GetIrradianceMap());
 
+	// Set env cubemap
+	meshShader->SetInt("envCubemap", 17);
+	glActiveTexture(GL_TEXTURE17);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, sky.GetEnvCubemap());
+
 	// Draw models
 	for (auto model : models) {
 		model->Draw(meshShader);
