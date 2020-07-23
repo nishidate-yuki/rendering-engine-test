@@ -13,6 +13,7 @@ public:
 
 	bool Initialize(const std::string& filePath, Engine* engine=nullptr);
 	void Draw(glm::mat4 view, glm::mat4 projection);
+	auto GetIrradianceMap() { return irradianceMap; }
 
 private:
 	void CreateCube();
