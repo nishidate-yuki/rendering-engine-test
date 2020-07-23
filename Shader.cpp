@@ -5,6 +5,24 @@
 #include <SDL2/SDL.h>
 #include <glm/gtc/type_ptr.hpp>
 
+void CheckOpenGLError(const char* stmt, const char* fname, int line)
+{
+	GLenum err = glGetError();
+	if (err != GL_NO_ERROR) {
+		printf("OpenGL error %08x, at %s:%i - for %s\n", err, fname, line, stmt);
+		abort();
+	}
+}
+
+#ifdef _DEBUG
+#define GL_CHECK(stmt) do { \
+            stmt; \
+            CheckOpenGLError(#stmt, __FILE__, __LINE__); \
+        } while (0)
+#else
+#define GL_CHECK(stmt) stmt
+#endif
+
 Shader::Shader()
 	: shaderProgram(0)
 	, vertexShader(0)
@@ -48,33 +66,33 @@ void Shader::Unload()
 
 void Shader::SetActive() const
 {
-	glUseProgram(shaderProgram);
+	GL_CHECK(glUseProgram(shaderProgram));
 }
 
 void Shader::SetMatrix(const char* name, const glm::mat4& matrix)
 {
 	GLuint loc = glGetUniformLocation(shaderProgram, name);
-	glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(matrix));
+	GL_CHECK(glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(matrix)));
 	// 第3引数: 行ベクトルを使うならTRUE
 }
 
 void Shader::SetVector(const char* name, const glm::vec3& vector)
 {
 	GLuint loc = glGetUniformLocation(shaderProgram, name);
-	glUniform3fv(loc, 1, glm::value_ptr(vector));
+	GL_CHECK(glUniform3fv(loc, 1, glm::value_ptr(vector)));
 }
 
 void Shader::SetFloat(const char* name, float value)
 {
 	GLuint loc = glGetUniformLocation(shaderProgram, name);
 	// Send the float data
-	glUniform1f(loc, value);
+	GL_CHECK(glUniform1f(loc, value));
 }
 
 void Shader::SetInt(const char* name, int value)
 {
 	GLuint loc = glGetUniformLocation(shaderProgram, name);
-	glUniform1i(loc, value);
+	GL_CHECK(glUniform1i(loc, value));
 }
 
 void Shader::SetDirectionalLight(const std::string name, const DirectionalLight dirLight)

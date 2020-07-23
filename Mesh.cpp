@@ -20,9 +20,9 @@ Mesh::~Mesh()
 
 void Mesh::Draw(Shader* shader)
 {
-	const char* maps[] = {
+	static const char* maps[] = {
 		"albedoMap", "emissiveMap", "normalMap",
-		"emissiveMap", "AOMap", "metalRoughMap"
+		"AOMap", "metalRoughMap"
 	};
 
 	for (int i = 0; i < textures.size(); i++) {
