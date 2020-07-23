@@ -18,18 +18,21 @@ private:
 	void CreateCube();
 	void RenderCube();
 	void CreateCubemap();
+	void ConvoluteCubemap();
 	bool LoadHDRI(const std::string& filePath);
 	unsigned int captureFBO;
 	unsigned int captureRBO;
-	unsigned int envCubemap;
 	unsigned int cubeVAO;
 	unsigned int cubeVBO;
 
 	unsigned int hdrTexture;
+	unsigned int envCubemap;
+	unsigned int irradianceMap;
 	int width;
 	int height;
 	int channels;
 	Shader* skyShader;
 	Shader* toCubemapShader;
+	Shader* irradianceShader;
 };
 
