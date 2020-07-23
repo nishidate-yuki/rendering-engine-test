@@ -17,14 +17,13 @@ uniform samplerCube irradianceMap;
 uniform sampler2D uTexture;
 uniform DirectionalLight uDirLight;
 
+// åªèÛÇÕNormalMappingÇ»ÇµÇ…ÇµÇƒÇ¢ÇÈ
 void main()
 {
 	vec3 N = normalize(fragNormal);
-//	vec3 L = - normalize(uDirLight.direction);
 
 	vec3 ambient = texture(irradianceMap, N).rgb;
 
-//	vec3 Diffuse = vec3(dot(N, L));
 	vec3 Diffuse = ambient;
 
     outColor = texture(uTexture, fragTexCoord);
