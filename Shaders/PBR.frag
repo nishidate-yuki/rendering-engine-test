@@ -87,14 +87,14 @@ void main()
 
 //	vec3 F0 = vec3(0.04);
 //  F0 = mix(F0, albedo.rgb, metallic);
-//
+
 	vec3 V = normalize(camPos - fragWorldPos);
     vec3 R = reflect(-V, N);
 
 	vec3 ambient = texture(irradianceMap, N).rgb;
-	vec3 Diffuse = ambient;
+	vec3 Diffuse = ambient * ao;
 //	outColor = albedo * vec4(Diffuse, 1.0);
 
 	vec3 environment = texture(envCubemap, R).rgb;
-	outColor = albedo * vec4(Diffuse, 1.0) + vec4(environment, 1.0) * metallic;
+	outColor = albedo * vec4(Diffuse, 1.0) + vec4(environment, 1.0) * metallic + vec4(emissive, 1.0);
 }
