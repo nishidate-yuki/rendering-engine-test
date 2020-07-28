@@ -30,7 +30,7 @@ bool WindowManager::Initialize(float screenWidth, float screenHeight)
 	SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
 
 	// Create window
-	window = SDL_CreateWindow("GameTemplate", 100, 100,
+	window = SDL_CreateWindow("SDL Window", 100, 100,
 		static_cast<int>(screenWidth), static_cast<int>(screenHeight), SDL_WINDOW_OPENGL);
 	if (!window) {
 		SDL_Log("Failed to create window: %s", SDL_GetError());

@@ -42,7 +42,7 @@ void Renderer::Draw()
 
 	glEnable(GL_DEPTH_TEST);
 	glDisable(GL_BLEND);
-	
+
 	scene->Draw();
 
 	glDisable(GL_DEPTH_TEST);
