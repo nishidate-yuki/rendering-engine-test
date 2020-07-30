@@ -49,6 +49,8 @@ bool WindowManager::Initialize(float screenWidth, float screenHeight)
 	glGetError();	// Clear error
 
 	glDepthFunc(GL_LEQUAL); // set depth function to less than AND equal for skybox depth trick.
+	// キューブマップをシームレスにする
+	glEnable(GL_TEXTURE_CUBE_MAP_SEAMLESS);
 
 	return true;
 }

@@ -55,6 +55,8 @@ bool Sky::Initialize(const std::string& filePath, Engine* engine)
 	engine->ResetViewport();
 	ConvoluteCubemap();
 	engine->ResetViewport();
+	PreFilterEnvMap();
+	engine->ResetViewport();
 
 	return true;
 }
@@ -99,6 +101,7 @@ void Sky::Draw(glm::mat4 view, glm::mat4 projection)
 	skyShader->SetInt("environmentMap", 0);
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, envCubemap);
+	//glBindTexture(GL_TEXTURE_CUBE_MAP, prefilterMap);	// test for prefiltering
 
 	RenderCube();
 }
@@ -129,6 +132,7 @@ void Sky::BuildCubemapFrom2DTexture()
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+	//glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);	// トリリニアフィルタリング
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
@@ -220,19 +224,37 @@ void Sky::PreFilterEnvMap()
 
 	glGenerateMipmap(GL_TEXTURE_CUBE_MAP);
 
-
-	//prefilterShader.use();
-	//prefilterShader.setInt("environmentMap", 0);
-	//prefilterShader.setMat4("projection", captureProjection);
-	//glActiveTexture(GL_TEXTURE0);
-	//glBindTexture(GL_TEXTURE_CUBE_MAP, envCubemap);
-
 	// Setup shader
-	//prefilterShader->SetActive();
-	//prefilterShader->SetMatrix("projection", captureProjection);
-	//prefilterShader->SetInt("environmentMap", 0);
-	//glActiveTexture(GL_TEXTURE0);
-	//glBindTexture(GL_TEXTURE_2D, hdrTexture);
+	prefilterShader->SetActive();
+	prefilterShader->SetMatrix("projection", captureProjection);
+	prefilterShader->SetInt("environmentMap", 0);
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, envCubemap);
+
+	glBindFramebuffer(GL_FRAMEBUFFER, captureFBO);
+	unsigned int maxMipLevels = 5;
+	for (unsigned int mip = 0; mip < maxMipLevels; ++mip) {
+		// MipレベルごとにループしてMipmapに保存していく
+		// Mipレベルに基づいてFramebufferのサイズを設定する
+		unsigned int mipWidth = 128 * std::pow(0.5, mip);
+		unsigned int mipHeight = 128 * std::pow(0.5, mip);
+		glBindRenderbuffer(GL_RENDERBUFFER, captureRBO);
+		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, mipWidth, mipHeight);
+		glViewport(0, 0, mipWidth, mipHeight);
+
+		// RoughnessはMipレベルから計算する [0.0, 1.0]
+		float roughness = (float)mip / (float)(maxMipLevels - 1);
+		prefilterShader->SetFloat("roughness", roughness);
+		for (unsigned int i = 0; i < 6; ++i) {
+			prefilterShader->SetMatrix("view", captureViews[i]);
+			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0,
+				GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, prefilterMap, mip);
+
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+			RenderCube();
+		}
+	}
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
 void Sky::RenderCube()
