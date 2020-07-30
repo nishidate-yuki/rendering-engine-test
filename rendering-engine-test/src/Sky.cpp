@@ -45,6 +45,10 @@ bool Sky::Initialize(const std::string& filePath, Engine* engine)
 	if (!prefilterShader->Load("Shaders/Cubemap.vert", "Shaders/PreFiltering.frag")) {
 		return false;
 	}
+	brdfShader = new Shader();
+	if (!brdfShader->Load("Shaders/BRDFintegral.vert", "Shaders/BRDFintegral.frag")) {
+		return false;
+	}
 	skyShader = new Shader();
 	if (!skyShader->Load("Shaders/SkyShader.vert", "Shaders/SkyShader.frag")) {
 		return false;
@@ -56,6 +60,8 @@ bool Sky::Initialize(const std::string& filePath, Engine* engine)
 	ConvoluteCubemap();
 	engine->ResetViewport();
 	PreFilterEnvMap();
+	engine->ResetViewport();
+	CalcBRDFtexture();
 	engine->ResetViewport();
 
 	return true;
@@ -257,10 +263,61 @@ void Sky::PreFilterEnvMap()
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 }
 
+void Sky::CalcBRDFtexture()
+{
+	glGenTextures(1, &brdfLUT);
+
+	// pre-allocate enough memory for the LUT texture.
+	glBindTexture(GL_TEXTURE_2D, brdfLUT);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RG16F, 512, 512, 0, GL_RG, GL_FLOAT, 0);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	glBindFramebuffer(GL_FRAMEBUFFER, captureFBO);
+	glBindRenderbuffer(GL_RENDERBUFFER, captureRBO);
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT24, 512, 512);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, brdfLUT, 0);
+
+	glViewport(0, 0, 512, 512);
+	brdfShader->SetActive();
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	RenderQuad();
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
 void Sky::RenderCube()
 {
 	glBindVertexArray(cubeVAO);
 	glDrawArrays(GL_TRIANGLES, 0, 36);
+	glBindVertexArray(0);
+}
+
+void Sky::RenderQuad()
+{
+	if (quadVAO == 0) {
+		float quadVertices[] = {
+			// positions        // texture Coords
+			-1.0f,  1.0f, 0.0f, 0.0f, 1.0f,
+			-1.0f, -1.0f, 0.0f, 0.0f, 0.0f,
+			 1.0f,  1.0f, 0.0f, 1.0f, 1.0f,
+			 1.0f, -1.0f, 0.0f, 1.0f, 0.0f,
+		};
+		// setup plane VAO
+		glGenVertexArrays(1, &quadVAO);
+		glGenBuffers(1, &quadVBO);
+		glBindVertexArray(quadVAO);
+		glBindBuffer(GL_ARRAY_BUFFER, quadVBO);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), &quadVertices, GL_STATIC_DRAW);
+		glEnableVertexAttribArray(0);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+		glEnableVertexAttribArray(1);
+		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+	}
+	glBindVertexArray(quadVAO);
+	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 	glBindVertexArray(0);
 }
 

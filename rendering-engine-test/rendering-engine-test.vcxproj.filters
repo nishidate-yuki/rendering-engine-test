@@ -63,6 +63,18 @@
     <None Include="Shaders\Cubemap.vert">
       <Filter>Shaders\PreCalculation</Filter>
     </None>
+    <None Include="Shaders\BRDFintegral.vert">
+      <Filter>Shaders\PreCalculation</Filter>
+    </None>
+    <None Include="Shaders\BRDFintegral.frag">
+      <Filter>Shaders\PreCalculation</Filter>
+    </None>
+    <None Include="Shaders\SpecularIBL.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\SpecularIBL.frag">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Scene.cpp">

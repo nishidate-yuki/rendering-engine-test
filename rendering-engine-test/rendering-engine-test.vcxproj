@@ -123,6 +123,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <None Include="Shaders\BRDFintegral.frag" />
+    <None Include="Shaders\BRDFintegral.vert" />
     <None Include="Shaders\ConvCubemap.frag" />
     <None Include="Shaders\DiffuseIBL.frag" />
     <None Include="Shaders\DiffuseIBL.vert" />
@@ -137,6 +139,8 @@
     <None Include="Shaders\PreFiltering.frag" />
     <None Include="Shaders\SkyShader.frag" />
     <None Include="Shaders\SkyShader.vert" />
+    <None Include="Shaders\SpecularIBL.frag" />
+    <None Include="Shaders\SpecularIBL.vert" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Camera.cpp" />

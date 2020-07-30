@@ -59,6 +59,8 @@ out vec4 outColor;
 uniform vec3 camPos;
 uniform samplerCube envCubemap;
 uniform samplerCube irradianceMap;
+uniform samplerCube prefilterMap;
+uniform sampler2D brdfLUT;
 
 uniform sampler2D albedoMap;
 uniform sampler2D emissiveMap;

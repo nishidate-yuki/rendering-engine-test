@@ -63,6 +63,16 @@ void Scene::Draw()
 	glActiveTexture(GL_TEXTURE17);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, sky.GetEnvCubemap());
 
+	// Set prefilterMap
+	meshShader->SetInt("prefilterMap", 18);
+	glActiveTexture(GL_TEXTURE18);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, sky.GetPrefilterMap());
+
+	// Set prefilterMap
+	meshShader->SetInt("brdfLUT", 19);
+	glActiveTexture(GL_TEXTURE19);
+	glBindTexture(GL_TEXTURE_2D, sky.GetBrdfLUT());
+
 	// Draw models
 	for (auto model : models) {
 		model->Draw(meshShader);
@@ -85,8 +95,8 @@ bool Scene::LoadContent()
 	Model* model = Importer::ImportModel("Assets/DamagedHelmet/glTF/DamagedHelmet.gltf");
 	models.push_back(model);
 
-	//sky.Initialize("Assets/palermo_park_4k.hdr", engine);
-	sky.Initialize("Assets/the_sky_is_on_fire_4k.hdr", engine);
+	sky.Initialize("Assets/palermo_park_4k.hdr", engine);
+	//sky.Initialize("Assets/the_sky_is_on_fire_4k.hdr", engine);
 
 	return true;
 }
@@ -94,8 +104,8 @@ bool Scene::LoadContent()
 bool Scene::LoadShaders()
 {
 	meshShader = new Shader();
-	// Normal, BasicMesh, Lambert, NormalMapping, DiffuseIBL, PBR
-	if (!meshShader->Load("Shaders/DiffuseIBL.vert", "Shaders/DiffuseIBL.frag")) {
+	// Normal, BasicMesh, Lambert, NormalMapping, DiffuseIBL, PBR, SpecularIBL
+	if (!meshShader->Load("Shaders/SpecularIBL.vert", "Shaders/SpecularIBL.frag")) {
 		return false;
 	}
 	return true;

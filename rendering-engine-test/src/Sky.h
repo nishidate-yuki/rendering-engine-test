@@ -15,24 +15,32 @@ public:
 	void Draw(glm::mat4 view, glm::mat4 projection);
 	auto GetIrradianceMap() { return irradianceMap; }
 	auto GetEnvCubemap() { return envCubemap; }
+	auto GetPrefilterMap() { return prefilterMap; }
+	auto GetBrdfLUT() { return brdfLUT; }
 
 private:
 	void CreateCube();
 	void RenderCube();
+	void RenderQuad();
+
 	void BuildCubemapFrom2DTexture();
 	void ConvoluteCubemap();
 	void PreFilterEnvMap();
+	void CalcBRDFtexture();
 
 	bool LoadHDRI(const std::string& filePath);
 	unsigned int captureFBO;
 	unsigned int captureRBO;
 	unsigned int cubeVAO;
 	unsigned int cubeVBO;
+	unsigned int quadVAO;
+	unsigned int quadVBO;
 
 	unsigned int hdrTexture;
 	unsigned int envCubemap;
 	unsigned int irradianceMap;
 	unsigned int prefilterMap;
+	unsigned int brdfLUT;
 	int width;
 	int height;
 	int channels;
@@ -40,6 +48,7 @@ private:
 	Shader* toCubemapShader;
 	Shader* irradianceShader;
 	Shader* prefilterShader;
+	Shader* brdfShader;
 
 	glm::mat4 captureProjection;
 	glm::mat4 captureViews[6];
