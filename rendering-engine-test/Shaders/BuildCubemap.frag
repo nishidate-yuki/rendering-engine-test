@@ -4,12 +4,13 @@ in vec3 localPos;
 
 uniform sampler2D hdri;
 
+// 0.1591 = 1/(2pi)
+// 0.3183 = 1/(pi)
 const vec2 invAtan = vec2(0.1591, 0.3183);
 vec2 SampleSphericalMap(vec3 v)
 {
     vec2 uv = vec2(atan(v.z, v.x), asin(v.y));
-    uv *= invAtan;
-    uv += 0.5;
+    uv = uv * invAtan + 0.5;	// radian -> uv
     return uv;
 }
 

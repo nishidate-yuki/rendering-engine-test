@@ -25,11 +25,11 @@ bool Sky::Initialize(const std::string& filePath, Engine* engine)
 
 	// Load shader for converting
 	toCubemapShader = new Shader();
-	if (!toCubemapShader->Load("Shaders/HDRItoCubemap.vert", "Shaders/HDRItoCubemap.frag")) {
+	if (!toCubemapShader->Load("Shaders/Cubemap.vert", "Shaders/BuildCubemap.frag")) {
 		return false;
 	}
 	irradianceShader = new Shader();
-	if (!irradianceShader->Load("Shaders/ConvCubemap.vert", "Shaders/ConvCubemap.frag")) {
+	if (!irradianceShader->Load("Shaders/Cubemap.vert", "Shaders/ConvCubemap.frag")) {
 		return false;
 	}
 	skyShader = new Shader();

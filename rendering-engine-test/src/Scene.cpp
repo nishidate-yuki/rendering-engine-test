@@ -85,8 +85,8 @@ bool Scene::LoadContent()
 	Model* model = Importer::ImportModel("Assets/DamagedHelmet/glTF/DamagedHelmet.gltf");
 	models.push_back(model);
 
-	sky.Initialize("Assets/palermo_park_4k.hdr", engine);
-	//sky.Initialize("Assets/the_sky_is_on_fire_4k.hdr", engine);
+	//sky.Initialize("Assets/palermo_park_4k.hdr", engine);
+	sky.Initialize("Assets/the_sky_is_on_fire_4k.hdr", engine);
 
 	return true;
 }
@@ -95,7 +95,7 @@ bool Scene::LoadShaders()
 {
 	meshShader = new Shader();
 	// Normal, BasicMesh, Lambert, NormalMapping, DiffuseIBL, PBR
-	if (!meshShader->Load("Shaders/PBR.vert", "Shaders/PBR.frag")) {
+	if (!meshShader->Load("Shaders/DiffuseIBL.vert", "Shaders/DiffuseIBL.frag")) {
 		return false;
 	}
 	return true;

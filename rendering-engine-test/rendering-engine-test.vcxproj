@@ -124,17 +124,17 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <None Include="Shaders\ConvCubemap.frag" />
-    <None Include="Shaders\ConvCubemap.vert" />
     <None Include="Shaders\DiffuseIBL.frag" />
     <None Include="Shaders\DiffuseIBL.vert" />
-    <None Include="Shaders\HDRItoCubemap.frag" />
-    <None Include="Shaders\HDRItoCubemap.vert" />
+    <None Include="Shaders\BuildCubemap.frag" />
+    <None Include="Shaders\Cubemap.vert" />
     <None Include="Shaders\Lambert.frag" />
     <None Include="Shaders\Lambert.vert" />
     <None Include="Shaders\NormalMapping.frag" />
     <None Include="Shaders\NormalMapping.vert" />
     <None Include="Shaders\PBR.frag" />
     <None Include="Shaders\PBR.vert" />
+    <None Include="Shaders\PreFiltering.frag" />
     <None Include="Shaders\SkyShader.frag" />
     <None Include="Shaders\SkyShader.vert" />
   </ItemGroup>

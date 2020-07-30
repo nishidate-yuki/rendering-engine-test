@@ -16,6 +16,9 @@
     <Filter Include="Shaders">
       <UniqueIdentifier>{705bba80-669d-4b0d-b126-30e611176b8c}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shaders\PreCalculation">
+      <UniqueIdentifier>{84958835-4266-48aa-a388-0b3ffc72a0ad}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="Shaders\Lambert.vert">
@@ -36,18 +39,6 @@
     <None Include="Shaders\SkyShader.vert">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="Shaders\HDRItoCubemap.vert">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="Shaders\HDRItoCubemap.frag">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="Shaders\ConvCubemap.vert">
-      <Filter>Shaders</Filter>
-    </None>
-    <None Include="Shaders\ConvCubemap.frag">
-      <Filter>Shaders</Filter>
-    </None>
     <None Include="Shaders\DiffuseIBL.frag">
       <Filter>Shaders</Filter>
     </None>
@@ -59,6 +50,18 @@
     </None>
     <None Include="Shaders\PBR.frag">
       <Filter>Shaders</Filter>
+    </None>
+    <None Include="Shaders\ConvCubemap.frag">
+      <Filter>Shaders\PreCalculation</Filter>
+    </None>
+    <None Include="Shaders\PreFiltering.frag">
+      <Filter>Shaders\PreCalculation</Filter>
+    </None>
+    <None Include="Shaders\BuildCubemap.frag">
+      <Filter>Shaders\PreCalculation</Filter>
+    </None>
+    <None Include="Shaders\Cubemap.vert">
+      <Filter>Shaders\PreCalculation</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>
