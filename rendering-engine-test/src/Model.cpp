@@ -8,6 +8,7 @@
 Model::Model()
 	: modelMatrix(1.0f)
 {
+	modelMatrix *= glm::rotate(glm::radians(90.0f), glm::vec3(1, 0, 0));
 }
 
 Model::~Model()

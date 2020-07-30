@@ -11,7 +11,7 @@ Camera::Camera(const float screenWidth, const float screenHeight)
 	, screenWidth(screenWidth)
 	, screenHeight(screenHeight)
 	, zDistance(4.0)
-	, yaw(120)
+	, yaw(45.0)
 	, pitch(-15.0)
 	, fov(30.0)
 {
