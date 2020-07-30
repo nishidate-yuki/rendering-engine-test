@@ -19,8 +19,10 @@ public:
 private:
 	void CreateCube();
 	void RenderCube();
-	void CreateCubemap();
+	void BuildCubemapFrom2DTexture();
 	void ConvoluteCubemap();
+	void PreFilterEnvMap();
+
 	bool LoadHDRI(const std::string& filePath);
 	unsigned int captureFBO;
 	unsigned int captureRBO;
@@ -30,11 +32,16 @@ private:
 	unsigned int hdrTexture;
 	unsigned int envCubemap;
 	unsigned int irradianceMap;
+	unsigned int prefilterMap;
 	int width;
 	int height;
 	int channels;
 	Shader* skyShader;
 	Shader* toCubemapShader;
 	Shader* irradianceShader;
+	Shader* prefilterShader;
+
+	glm::mat4 captureProjection;
+	glm::mat4 captureViews[6];
 };
 

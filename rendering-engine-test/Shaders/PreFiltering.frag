@@ -12,8 +12,7 @@ float RadicalInverse(uint bits);
 vec2 Hammersley(uint i, float invN);
 vec3 ImportanceSampleGGX(vec2 Xi, vec3 N, float roughness);
 
-// 入力された環境キューブマップを異なる粗さごとにフィルタリングする
-// フィルタされたマップはミップマップとして保存される
+// 入力された環境キューブマップをroughnessに基づいてフィルタリングする
 void main(){
     // キューブのフラグメントは単位球の表面なので、
 	// ワールド座標の方向が法線となる。さらにN=R=Vと近似する。
