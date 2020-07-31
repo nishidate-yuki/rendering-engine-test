@@ -1,4 +1,4 @@
-#version 330
+#version 430
 
 // world transform / view-proj
 uniform mat4 model;

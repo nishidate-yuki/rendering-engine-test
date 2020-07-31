@@ -69,8 +69,8 @@ void main()
 	vec3 irradiance = texture(irradianceMap, N).rgb;
 	vec3 diffuse    = irradiance * albedo.rgb;
 
-	vec3 ambient = (kD * diffuse + specular);	// without AO
-//	vec3 ambient = (kD * diffuse + specular) * ao;	// with AO
+//	vec3 ambient = (kD * diffuse + specular);	// without AO
+	vec3 ambient = (kD * diffuse + specular) * ao;	// with AO
 
 	vec3 color = ambient;
     // HDR tonemapping

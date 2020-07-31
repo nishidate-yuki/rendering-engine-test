@@ -57,6 +57,9 @@ bool Sky::Initialize(const std::string& filePath, Engine* engine)
 	glViewport(0, 0, 512, 512);
 	BuildCubemapFrom2DTexture();
 	engine->ResetViewport();
+	glBindTexture(GL_TEXTURE_CUBE_MAP, envCubemap);
+	glGenerateMipmap(GL_TEXTURE_CUBE_MAP);
+
 	ConvoluteCubemap();
 	engine->ResetViewport();
 	PreFilterEnvMap();
