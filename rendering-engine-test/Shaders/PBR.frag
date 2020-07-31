@@ -28,6 +28,8 @@ uniform sampler2D normalMap;
 uniform sampler2D AOMap;
 uniform sampler2D metalRoughMap;
 
+uniform float time;
+
 uniform DirectionalLight uDirLight;
 
 float DistributionGGX(vec3 N, vec3 H, float roughness);
@@ -48,10 +50,10 @@ void main()
     float metallic   = metalRough.x;
     float roughness  = metalRough.y;
 
-//	normal = normalize(2.0 * normal.rgb - 1.0);
-//  normal = normalize(TBN * normal);
-//	vec3 N = normalize(normal);
-	vec3 N = normalize(fragNormal);
+	normal = normalize(2.0 * normal.rgb - 1.0);
+    normal = normalize(TBN * normal);
+	vec3 N = normalize(normal);
+//	vec3 N = normalize(fragNormal);
 
 	vec3 V = normalize(camPos - fragWorldPos);
 	vec3 R = reflect(-V, N);
@@ -59,7 +61,8 @@ void main()
 	vec3 F0 = vec3(0.04);
     F0 = mix(F0, albedo, metallic);
 
-	vec3 prefilteredColor = textureLod(prefilterMap, R, roughness * MAX_REFLECTION_LOD).rgb;
+	float lodLevel = roughness * MAX_REFLECTION_LOD;
+	vec3 prefilteredColor = textureLod(prefilterMap, R, lodLevel).rgb;
 
 	float NdotV    = max(dot(N, V), 0.0);	// LUTÇÃxç¿ïW
 	vec3  F        = FresnelSchlickRoughness(NdotV, F0, roughness);
@@ -76,12 +79,11 @@ void main()
 
 	vec3 ambient = (kD * diffuse + specular) * ao;
 
-//	vec3 color = ambient + emissive;
-	vec3 color = irradiance;
+	vec3 color = ambient + emissive;
 
     color = color / (color + vec3(1.0));	// HDR tonemapping
     color = pow(color, vec3(1.0/2.2));		// gamma correct
-    outColor = vec4(color, 1.0);
+    outColor = vec4(vec3(color), 1.0);
 }
 
 

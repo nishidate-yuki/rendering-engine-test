@@ -109,8 +109,8 @@ void Sky::Draw(glm::mat4 view, glm::mat4 projection)
 	// Set cubemap
 	skyShader->SetInt("environmentMap", 0);
 	glActiveTexture(GL_TEXTURE0);
-	glBindTexture(GL_TEXTURE_CUBE_MAP, envCubemap);
-	//glBindTexture(GL_TEXTURE_CUBE_MAP, prefilterMap);	// test for prefiltering
+	//glBindTexture(GL_TEXTURE_CUBE_MAP, envCubemap);
+	glBindTexture(GL_TEXTURE_CUBE_MAP, prefilterMap);	// test for prefiltering
 
 	RenderCube();
 }

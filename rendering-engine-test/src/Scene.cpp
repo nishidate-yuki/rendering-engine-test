@@ -34,7 +34,7 @@ bool Scene::Initialize(const float screenWidth, const float screenHeight)
 {
 	camera = new Camera(screenWidth, screenHeight);
 
-	if (!LoadContent()) {
+	if (!LoadContent(Content::Helmet)) {
 		printf("Failed to load contents.\n");
 		return false;
 	}
@@ -52,6 +52,7 @@ void Scene::Draw()
 	meshShader->SetMatrix("viewProj", camera->GetViewProjection());
 	meshShader->SetDirectionalLight("uDirLight", dirLight);
 	meshShader->SetVector("camPos", camera->GetPos());
+	meshShader->SetFloat("time", float(time++));
 
 	// Set irradiance map
 	meshShader->SetInt("irradianceMap", 16);
@@ -90,10 +91,15 @@ void Scene::Update(const float deltaTime)
 }
 
 
-bool Scene::LoadContent()
+bool Scene::LoadContent(Content cont)
 {
-	Model* model = Importer::ImportModel("Assets/DamagedHelmet/glTF/DamagedHelmet.gltf");
-	models.push_back(model);
+	if (cont == Content::Helmet) {
+		Model* model = Importer::ImportModel("Assets/DamagedHelmet/glTF/DamagedHelmet.gltf");
+		models.push_back(model);
+	}
+	else if (cont == Content::Spheres) {
+		// Load spheres
+	}
 
 	sky.Initialize("Assets/PaperMill_E_3k.hdr", engine);
 	//sky.Initialize("Assets/palermo_park_4k.hdr", engine);
@@ -106,7 +112,7 @@ bool Scene::LoadShaders()
 {
 	meshShader = new Shader();
 	// Normal, BasicMesh, Lambert, NormalMapping, DiffuseIBL, PBR, SpecularIBL
-	if (!meshShader->Load("Shaders/DiffuseIBL.vert", "Shaders/DiffuseIBL.frag")) {
+	if (!meshShader->Load("Shaders/PBR.vert", "Shaders/PBR.frag")) {
 		return false;
 	}
 	return true;

@@ -9,6 +9,12 @@ class Shader;
 class Engine;
 class Camera;
 
+enum class Content
+{
+	Helmet,
+	Spheres
+};
+
 class Scene
 {
 public:
@@ -18,7 +24,7 @@ public:
 	void Draw();
 	void Update(const float deltaTime);
 
-	bool LoadContent();
+	bool LoadContent(Content cont);
 	bool LoadShaders();
 
 	auto GetCamera() const { return camera; }
@@ -37,5 +43,7 @@ private:
 
 	// Objects
 	std::vector<Model*> models;
+
+	unsigned int time = 0;
 };
 

@@ -7,8 +7,8 @@ uniform samplerCube environmentMap;
 
 void main()
 {
-    vec3 envColor = texture(environmentMap, localPos).rgb;
-//	vec3 envColor = textureLod(environmentMap, localPos, 1.2).rgb;	// test for prefiltering
+//    vec3 envColor = texture(environmentMap, localPos).rgb;
+	vec3 envColor = textureLod(environmentMap, localPos, 1.2).rgb;	// test for prefiltering
 
 	// Tone mapping
     envColor = envColor / (envColor + vec3(1.0));
