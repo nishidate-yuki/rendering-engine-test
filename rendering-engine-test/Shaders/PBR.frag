@@ -42,7 +42,8 @@ vec3 FresnelSchlickRoughness(float cosTheta, vec3 F0, float roughness);
 // ”½ŽË‚ÌŒã‚ÉNormalMapping‚ð‚µ‚½•û‚ªˆá‚¢‚ª•ª‚©‚è‚â‚·‚¢
 void main()
 {
-    vec3  albedo     = texture(albedoMap, fragTexCoord).rgb;
+//    vec3  albedo     = texture(albedoMap, fragTexCoord).rgb;
+    vec3  albedo     = pow(texture(albedoMap, fragTexCoord).rgb, vec3(2.2));
     vec3  emissive   = texture(emissiveMap, fragTexCoord).rgb;
     vec3  normal     = texture(normalMap, fragTexCoord).rgb;
     float ao         = texture(AOMap, fragTexCoord).r;
