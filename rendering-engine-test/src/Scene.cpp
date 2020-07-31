@@ -101,8 +101,8 @@ bool Scene::LoadContent(Content cont)
 		// Load spheres
 	}
 
-	sky.Initialize("Assets/PaperMill_E_3k.hdr", engine);
-	//sky.Initialize("Assets/palermo_park_4k.hdr", engine);
+	//sky.Initialize("Assets/PaperMill_E_3k.hdr", engine);
+	sky.Initialize("Assets/palermo_park_4k.hdr", engine);
 	//sky.Initialize("Assets/the_sky_is_on_fire_4k.hdr", engine);
 
 	return true;

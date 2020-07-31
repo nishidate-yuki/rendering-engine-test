@@ -54,7 +54,6 @@ void main()
 	normal = normalize(2.0 * normal.rgb - 1.0);
     normal = normalize(TBN * normal);
 	vec3 N = normalize(normal);
-//	vec3 N = normalize(fragNormal);
 
 	vec3 V = normalize(camPos - fragWorldPos);
 	vec3 R = reflect(-V, N);
