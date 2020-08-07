@@ -28,6 +28,9 @@ uniform sampler2D normalMap;
 uniform sampler2D AOMap;
 uniform sampler2D metalRoughMap;
 
+uniform bool enableEmissive;
+uniform bool enableAO;
+
 uniform float time;
 
 uniform DirectionalLight uDirLight;
@@ -92,9 +95,15 @@ void main()
 	vec3 irradiance = texture(irradianceMap, N).rgb;
 	vec3 diffuse    = irradiance * albedo;
 
-	vec3 ambient = (kD * diffuse + specular) * ao;
+	vec3 ambient = (kD * diffuse + specular);
+	if(enableAO){
+		ambient *= ao;
+	}
 
-	vec3 color = ambient + emissive;
+	vec3 color = ambient;
+	if(enableEmissive){
+		color += emissive;
+	}
 
     color = color / (color + vec3(1.0));	// HDR tonemapping
     color = pow(color, vec3(1.0/2.2));		// gamma correct

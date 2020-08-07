@@ -25,11 +25,21 @@ void Mesh::Draw(Shader* shader)
 		"AOMap", "metalRoughMap"
 	};
 
+	shader->SetInt("enableAO", 0);
+	shader->SetInt("enableEmissive", 0);
+
 	for (int i = 0; i < textures.size(); i++) {
 		glActiveTexture(GL_TEXTURE0 + i);
 		textures[i].SetActive();
-		int type = static_cast<int>(textures[i].GetType());
-		shader->SetInt(maps[type], i);
+		TextureType type = textures[i].GetType();
+		if (type == TextureType::AmbientOcclusion) {
+			shader->SetInt("enableAO", 1);
+		}
+		if (type == TextureType::Emissive) {
+			shader->SetInt("enableEmissive", 1);
+		}
+		int typei = static_cast<int>(type);
+		shader->SetInt(maps[typei], i);
 	}
 
 	vertexArray->Draw();

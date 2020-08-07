@@ -18,6 +18,7 @@ public:
 	void SetVector(const char* name, const glm::vec3& vector);
 	void SetFloat(const char* name, float value);
 	void SetInt(const char* name, int value);
+	//void SetBool(const char* name, bool value);
 	void SetDirectionalLight(const std::string name, const DirectionalLight dirLight);
 
 private:

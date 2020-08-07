@@ -95,6 +95,14 @@ void Shader::SetInt(const char* name, int value)
 	GL_CHECK(glUniform1i(loc, value));
 }
 
+//void Shader::SetBool(const char* name, bool value)
+//{
+//	GLuint loc = glGetUniformLocation(shaderProgram, name);
+//	// bool‚Í®”‚ğ‘—‚éŠÖ”‚Å‚¢‚¢
+//	// ‚½‚¾‚µ 0 or 1 ˆÈŠO‚¾‚ÆŠëŒ¯
+//	GL_CHECK(glUniform1i(loc, value));
+//}
+
 void Shader::SetDirectionalLight(const std::string name, const DirectionalLight dirLight)
 {
 	SetVector((name + ".color").c_str(), dirLight.color);
