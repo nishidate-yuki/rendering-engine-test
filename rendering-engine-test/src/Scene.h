@@ -12,7 +12,8 @@ class Camera;
 enum class Content
 {
 	Helmet,
-	Spheres
+	Spheres,
+	Sponza
 };
 
 class Scene

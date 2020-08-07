@@ -27,8 +27,9 @@ void Mesh::Draw(Shader* shader)
 
 	for (int i = 0; i < textures.size(); i++) {
 		glActiveTexture(GL_TEXTURE0 + i);
-			textures[i].SetActive();
-			shader->SetInt(maps[i], i);
+		textures[i].SetActive();
+		int type = static_cast<int>(textures[i].GetType());
+		shader->SetInt(maps[type], i);
 	}
 
 	vertexArray->Draw();

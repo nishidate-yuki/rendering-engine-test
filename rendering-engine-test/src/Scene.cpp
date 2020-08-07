@@ -34,7 +34,7 @@ bool Scene::Initialize(const float screenWidth, const float screenHeight)
 {
 	camera = new Camera(screenWidth, screenHeight);
 
-	if (!LoadContent(Content::Helmet)) {
+	if (!LoadContent(Content::Sponza)) {
 		printf("Failed to load contents.\n");
 		return false;
 	}
@@ -99,6 +99,10 @@ bool Scene::LoadContent(Content cont)
 	}
 	else if (cont == Content::Spheres) {
 		// Load spheres
+	} else if (cont == Content::Sponza) {
+		Model* model = Importer::ImportModel("Assets/Sponza/glTF/Sponza.gltf");
+		model->SetScale(0.01);
+		models.push_back(model);
 	}
 
 	//sky.Initialize("Assets/PaperMill_E_3k.hdr", engine);

@@ -5,6 +5,7 @@
 #include <GL/glew.h>
 
 Texture::Texture()
+	: type(TextureType::Diffuse)
 {
 }
 

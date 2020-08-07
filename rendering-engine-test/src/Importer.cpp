@@ -173,6 +173,29 @@ std::vector<Texture> Importer::ProcessTextures(const aiMaterial* material, std::
 			if (textureMap.count(fullTexturePath) == 0) {
 				Texture texture;
 				texture.Load(fullTexturePath);
+				switch (type) {
+					case aiTextureType_DIFFUSE:
+					case aiTextureType_BASE_COLOR:
+						texture.SetType(TextureType::Diffuse);
+						break;
+					case aiTextureType_EMISSIVE:
+					case aiTextureType_EMISSION_COLOR:
+						texture.SetType(TextureType::Emissive);
+						break;
+					case aiTextureType_NORMALS:
+						texture.SetType(TextureType::Normal);
+						break;
+					case aiTextureType_AMBIENT:
+					case aiTextureType_LIGHTMAP:
+					case aiTextureType_AMBIENT_OCCLUSION:
+						texture.SetType(TextureType::AmbientOcclusion);
+						break;
+					case aiTextureType_UNKNOWN:
+						texture.SetType(TextureType::MetalRoughness);
+						break;
+					default:
+						break;
+				}
 				textureMap.insert({ fullTexturePath, texture });
 				std::cout << "FullTexturePath: " << fullTexturePath << "(" << type << ")" << std::endl;
 			}
